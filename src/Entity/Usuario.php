@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UsuarioRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -33,6 +35,17 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $nome = null;
+
+    /**
+     * @var Collection<int, Venda>
+     */
+    #[ORM\OneToMany(targetEntity: Venda::class, mappedBy: 'usuario')]
+    private Collection $vendas;
+
+    public function __construct()
+    {
+        $this->vendas = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -125,5 +138,35 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    /**
+     * @return Collection<int, Venda>
+     */
+    public function getVendas(): Collection
+    {
+        return $this->vendas;
+    }
+
+    public function addVenda(Venda $venda): static
+    {
+        if (!$this->vendas->contains($venda)) {
+            $this->vendas->add($venda);
+            $venda->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVenda(Venda $venda): static
+    {
+        if ($this->vendas->removeElement($venda)) {
+            // set the owning side to null (unless already changed)
+            if ($venda->getUsuario() === $this) {
+                $venda->setUsuario(null);
+            }
+        }
+
+        return $this;
     }
 }
