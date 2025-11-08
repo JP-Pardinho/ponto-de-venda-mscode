@@ -22,4 +22,10 @@ class CategoriaRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    public function remover(Categoria $categoria): void
+    {
+        $this->getEntityManager()->remove($categoria);
+        $this->getEntityManager()->flush();
+    }
+
 }

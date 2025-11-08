@@ -42,15 +42,15 @@
                             <th scope="row">{{ categoria.id }}</th>
                             <td>{{ categoria.nome }}</td>
                             <td class="col-1 text-align-right">
-                                <a class="btn btn-secondary btn-sm"
-                                title="Editar"
-                                href="">
+                                <a  class="btn btn-secondary btn-sm"
+                                    title="Editar"
+                                    href="">
                                     <i class="bi bi-pencil"></i>
                                 </a>
 
-                                <a class="btn btn-danger btn-sm"
-                                title="Remover"
-                                href="">
+                                <a  class="btn btn-danger btn-sm"
+                                    title="Remover"
+                                    href="{{ path('remover_categoria', {categoria: categoria.id}) }}">
                                     <i class="bi bi-trash"></i>
                                 </a>
                             </td>
