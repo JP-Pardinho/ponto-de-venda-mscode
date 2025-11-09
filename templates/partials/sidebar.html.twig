@@ -1,5 +1,5 @@
 <nav class="sidebar d-flex flex-column p-3">
-    <a href="#" class="d-flex align-items-center text-white text-decoration-none">
+    <a href="{{ path('app') }}" class="d-flex align-items-center text-white text-decoration-none">
         <h3 class="text-white mt-3">
             <i class="bi bi-code-square"></i>
             Dashboard
@@ -11,7 +11,7 @@
     <ul class="nav nav-pills flex-column">
         <li class="nav-item">
             <a href="" class="nav-link d-flex align-items-center text-white text-decoration-none">
-                <i class="bi bi-bank fs-4 me-2"></i>
+                <i class="bi bi-shop fs-4 me-2"></i>
                 PDV
             </a>
         </li>
@@ -21,7 +21,7 @@
 
     <ul class="nav nav-pills flex-column">
         <li class="nav-item">
-            <a href="" class="nav-link d-flex align-items-center text-white text-decoration-none">
+            <a href="{{ path('listar_categorias') }}" class="nav-link d-flex align-items-center text-white text-decoration-none">
                 <i class="bi bi-tags fs-4 me-2"></i>
                 Categorias
             </a>
@@ -31,13 +31,6 @@
             <a href="" class="nav-link d-flex align-items-center text-white text-decoration-none">
                 <i class="bi bi-box-seam fs-4 me-2"></i>
                 Estoque
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a href="" class="nav-link d-flex align-items-center text-white text-decoration-none">
-                <i class="bi bi-shop fs-4 me-2"></i>
-                Produtos
             </a>
         </li>
 
