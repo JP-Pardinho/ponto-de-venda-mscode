@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PDV - Produtos{% endblock %}
+
+{% block body %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="container py-5">
+                <div class="mb-4 d-flex flex-row justify-content-between">
+                    <h1><i class="bi bi-box-seam-fill"></i> Produtos</h1>
+                </div>
+                
+                <ul class="nav nav-tabs mb-3">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="bi bi-list-ul"></i> Listar produtos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="#">
+                            <i class="bi bi-plus"></i> Novo produto
+                        </a>
+                    </li>
+                </ul>
+                
+                {% include '/partials/error-mensage.html.twig' %}
+
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Descrição</th>
+                            <th scope="col">Categoria</th>
+                            <th scope="col">Valor</th>
+                            <th scope="col">Qtd. Disponível</th>
+                            <th scope="col-2 text-align-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for produto in produtos %}
+                        <tr class="align-middle">
+                            <th scope="row">{{ produto.id }}</th>
+                            <td>{{ produto.nome }}</td>
+                            <td>{{ produto.descricao }}</td>
+                            <td>{{ categoriaMap[produto.categoriaId] }}</td>
+                            <td>{{ produto.valor }}</td>
+                            <td>{{ produto.quantidadeDisponivel }}</td>
+                            <td class="col-2 w-auto">
+                                <div class="d-flex flex-column gap-2">
+                                    <div class="d-flex gap-1">
+                                        <form action="{{ path('adicionar_produto', {produto: produto.id}) }}" 
+                                              method="POST" 
+                                              class="flex-fill">
+                                            <button type="submit" 
+                                                    class="btn btn-primary btn-sm w-100" 
+                                                    title="Adicionar 1 (incrementar quantidade)">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </form>
+
+                                        <a type="button"
+                                           class="btn btn-secondary btn-sm flex-fill"
+                                           title="Editar"
+                                           href="{{ path('editar_produto_show', {produto: produto.id}) }}">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+
+                                        <form action="{{ path('remover_produto', {produto: produto.id}) }}" 
+                                              method="POST" 
+                                              class="flex-fill">
+                                            <button type="submit"
+                                                    class="btn btn-danger btn-sm w-100"
+                                                    title="Excluir">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <form action="{{ path('vender_produto', {produto: produto.id}) }}" 
+                                          method="POST">
+                                        <button type="submit"
+                                                class="btn btn-primary btn-sm w-100"
+                                                title="Vender produto (decrementar 1)">
+                                            Vender
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
