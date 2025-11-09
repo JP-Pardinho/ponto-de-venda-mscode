@@ -14,7 +14,7 @@
                 <ul class="nav nav-tabs mb-3">
 
                     <li class="nav-item">
-                        <a class="nav-link active" href="">
+                        <a class="nav-link active" href="#">
                             <i class="bi bi-list-ul"></i> Listar Categorias
                         </a>
                     </li>
@@ -44,7 +44,7 @@
                             <td class="col-1 text-align-right">
                                 <a  class="btn btn-secondary btn-sm"
                                     title="Editar"
-                                    href="">
+                                    href="{{ path('editar_categoria_show', {categoria: categoria.id}) }}">
                                     <i class="bi bi-pencil"></i>
                                 </a>
 

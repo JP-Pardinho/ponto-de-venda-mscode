@@ -22,7 +22,7 @@ final class RemoverCategoriaController extends AbstractController
     {
         if (!$categoria) {
             $this->addFlash('danger', 'Não foi possível encontrar a categoria!');
-            return $this->redirectToRoute('listar_categoria');
+            return $this->redirectToRoute('listar_categorias');
         }
 
         $produtosVinculados = $this->produtoRepository->count(['categoria' => $categoria->getId('id')]);
@@ -34,6 +34,6 @@ final class RemoverCategoriaController extends AbstractController
 
         $this->categoriaRepository->remover($categoria);
 
-        return $this->redirectToRoute('listar_categoria');
+        return $this->redirectToRoute('listar_categorias');
     }
 }

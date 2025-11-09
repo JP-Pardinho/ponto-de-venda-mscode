@@ -14,7 +14,7 @@ final class ListarCategoriaController extends AbstractController
     ){    
     }
 
-    #[Route('/listar/categoria', name: 'listar_categoria', methods:'GET')]
+    #[Route('/categorias', name: 'listar_categorias', methods:'GET')]
     public function show(): Response
     {
         return $this->render('categoria/index.html.twig', [
