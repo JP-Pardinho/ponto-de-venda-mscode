@@ -1,3 +1,5 @@
+{% set current_path = app.request.pathInfo %}
+
 <nav class="sidebar d-flex flex-column p-3">
     <a href="{{ path('app') }}" class="d-flex align-items-center text-white text-decoration-none">
         <h3 class="text-white mt-3">
@@ -21,7 +23,8 @@
 
     <ul class="nav nav-pills flex-column">
         <li class="nav-item">
-            <a href="{{ path('listar_categorias') }}" class="nav-link d-flex align-items-center text-white text-decoration-none">
+            <a  href="{{ path('listar_categorias') }}" 
+                class="nav-link d-flex align-items-center text-white text-decoration-none {% if current_path starts with path('listar_categorias') %}active{% endif %}">
                 <i class="bi bi-tags fs-4 me-2"></i>
                 Categorias
             </a>

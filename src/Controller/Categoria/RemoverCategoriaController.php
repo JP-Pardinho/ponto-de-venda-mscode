@@ -17,7 +17,7 @@ final class RemoverCategoriaController extends AbstractController
     ) {  
     }
 
-    #[Route('/categoria/remover/{categoria}', name: 'remover_categoria', methods:'GET')]
+    #[Route('/categorias/remover/{categoria}', name: 'remover_categoria', methods:'GET')]
     public function remover(?Categoria $categoria): Response
     {
         if (!$categoria) {

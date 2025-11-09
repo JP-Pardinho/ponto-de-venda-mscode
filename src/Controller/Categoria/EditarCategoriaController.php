@@ -16,7 +16,7 @@ final class EditarCategoriaController extends AbstractController
     ) {   
     }
 
-    #[Route('/categoria/{categoria}/editar', name: 'editar_categoria_show', methods:'GET')]
+    #[Route('/categorias/{categoria}/editar', name: 'editar_categoria_show', methods:'GET')]
     public function show(Categoria $categoria): Response
     {
         if (!$categoria) {
@@ -29,7 +29,7 @@ final class EditarCategoriaController extends AbstractController
         ]);
     }
 
-    #[Route('/categoria/{categoria}/editar', name: 'editar_categoria', methods:'POST')]
+    #[Route('/categorias/{categoria}/editar', name: 'editar_categoria', methods:'POST')]
     public function editar(Categoria $categoria, Request $request): Response
     {
         if (!$categoria) {

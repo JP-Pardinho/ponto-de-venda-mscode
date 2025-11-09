@@ -16,13 +16,13 @@ final class SalvarCategoriaController extends AbstractController
     ) {  
     }
 
-    #[Route('/categoria/salvar', name: 'cadastrar_categoria_show', methods:'GET')]
+    #[Route('/categorias/salvar', name: 'cadastrar_categoria_show', methods:'GET')]
     public function show(): Response
     {
         return $this->render('categoria/new.html.twig');
     }
 
-    #[Route('/categoria/salvar', name: 'cadastrar_categoria', methods:'POST')]
+    #[Route('/categorias/salvar', name: 'cadastrar_categoria', methods:'POST')]
     public function new(Request $request): Response
     {
         $nomeCategoria = $request->request->get('nome');
