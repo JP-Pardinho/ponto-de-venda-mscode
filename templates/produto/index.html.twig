@@ -20,7 +20,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="#">
+                        <a class="nav-link text-black" href="{{ path('salvar_produto_show') }}">
                             <i class="bi bi-plus"></i> Novo produto
                         </a>
                     </li>
@@ -33,11 +33,11 @@
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Nome</th>
-                            <th scope="col">Descrição</th>
                             <th scope="col">Categoria</th>
+                            <th scope="col">Estoque</th>
                             <th scope="col">Valor</th>
-                            <th scope="col">Qtd. Disponível</th>
-                            <th scope="col-2 text-align-right">Ações</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,31 +45,36 @@
                         <tr class="align-middle">
                             <th scope="row">{{ produto.id }}</th>
                             <td>{{ produto.nome }}</td>
-                            <td>{{ produto.descricao }}</td>
-                            <td>{{ categoriaMap[produto.categoriaId] }}</td>
-                            <td>{{ produto.valor }}</td>
-                            <td>{{ produto.quantidadeDisponivel }}</td>
-                            <td class="col-2 w-auto">
+                            <td>{{ produto.categoria.nome }}</td>
+                            <td>{{ produto.quantidadeEstoque }}</td>
+                            <td>R${{ produto.valor|number_format(2, ',', '.') }}</td>
+                            
+                            <td>
+                                {% if produto.isAtivo %}
+                                    <span class="badge bg-success">Ativo</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inativo</span>
+                                {% endif %}
+                            </td>
+                            
+                            <td class="col-1">
                                 <div class="d-flex flex-column gap-2">
                                     <div class="d-flex gap-1">
-                                        <form action="{{ path('adicionar_produto', {produto: produto.id}) }}" 
-                                              method="POST" 
-                                              class="flex-fill">
-                                            <button type="submit" 
-                                                    class="btn btn-primary btn-sm w-100" 
-                                                    title="Adicionar 1 (incrementar quantidade)">
-                                                <i class="bi bi-plus"></i>
-                                            </button>
-                                        </form>
-
+                                        <a type="button"
+                                           class="btn btn-primary btn-sm flex-fill"
+                                           title="Vizualizar"
+                                           href="{{ path('ver_produto', {produto: produto.id}) }}">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        
                                         <a type="button"
                                            class="btn btn-secondary btn-sm flex-fill"
                                            title="Editar"
-                                           href="{{ path('editar_produto_show', {produto: produto.id}) }}">
+                                           href="">
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
-                                        <form action="{{ path('remover_produto', {produto: produto.id}) }}" 
+                                        <form action="" 
                                               method="POST" 
                                               class="flex-fill">
                                             <button type="submit"
@@ -79,15 +84,6 @@
                                             </button>
                                         </form>
                                     </div>
-
-                                    <form action="{{ path('vender_produto', {produto: produto.id}) }}" 
-                                          method="POST">
-                                        <button type="submit"
-                                                class="btn btn-primary btn-sm w-100"
-                                                title="Vender produto (decrementar 1)">
-                                            Vender
-                                        </button>
-                                    </form>
                                 </div>
                             </td>
                         </tr>
