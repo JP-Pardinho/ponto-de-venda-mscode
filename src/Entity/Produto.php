@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ProdutoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProdutoRepository::class)]
@@ -36,6 +37,15 @@ class Produto
      */
     #[ORM\OneToMany(targetEntity: VendaItem::class, mappedBy: 'produto')]
     private Collection $vendaItems;
+
+    #[ORM\Column]
+    private ?float $valor = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTime $dataCadastro = null;
+
+    #[ORM\Column]
+    private ?bool $ativo = null;
 
     public function __construct()
     {
@@ -133,6 +143,42 @@ class Produto
                 $vendaItem->setProduto(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getValor(): ?float
+    {
+        return $this->valor;
+    }
+
+    public function setValor(float $valor): static
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    public function getDataCadastro(): ?\DateTime
+    {
+        return $this->dataCadastro;
+    }
+
+    public function setDataCadastro(\DateTime $dataCadastro): static
+    {
+        $this->dataCadastro = $dataCadastro;
+
+        return $this;
+    }
+
+    public function isAtivo(): ?bool
+    {
+        return $this->ativo;
+    }
+
+    public function setAtivo(bool $ativo): static
+    {
+        $this->ativo = $ativo;
 
         return $this;
     }

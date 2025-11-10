@@ -28,7 +28,7 @@
 
                 <div class="w-100 mt-4">
                     {% include "/partials/error-mensage.html.twig" %}
-                    <form action="{{ path('cadastrar_categoria') }}" method="POST">
+                    <form action="{{ path('salvar_categoria') }}" method="POST">
                         <div class="mb-3">
                             <label for="nome" class="form-label">Nome: *</label>
                             <input type="text" class="form-control" id="nome" name="nome" minlength="3" required autofocus>

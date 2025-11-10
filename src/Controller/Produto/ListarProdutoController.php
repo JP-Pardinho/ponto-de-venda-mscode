@@ -19,16 +19,8 @@ final class ListarProdutoController extends AbstractController
     #[Route('/produtos', name: 'listar_produtos')]
     public function show(): Response
     {
-        $categorias = $this->categoriaRepository->findAll();
-        $categoriaMap = [];
-        
-        foreach ($categorias as $categoria) {
-            $categoriaMap[$categoria->getId()] = $categoria->getNome();
-        }
-
         return $this->render('produto/index.html.twig', [
-            'produtos' => $this->produtoRepository->findAll(),
-            'categorias' => $categoriaMap
+            'produtos' => $this->produtoRepository->findAllWithCategory(),
         ]);
     }
 }
