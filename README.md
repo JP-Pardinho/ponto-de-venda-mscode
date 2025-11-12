@@ -14,6 +14,7 @@ Um sistema de Ponto de Venda (PDV) e controle de estoque simples, feito com intu
 * [Sobre o Projeto](#-sobre-o-projeto)
 * [Visão Geral (Screenshots)](#-visão-geral)
 * [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+* [Principais funcionalidades](#-princiapais-funcionalidades)
 
 ---
 
@@ -45,5 +46,33 @@ O projeto foi construído utilizando as seguintes tecnologias:
 * **Ferramentas de Dev:** Git, VS Code
 
 ---
+
+## 💡 Principais Funcionalidades
+Este é um checklist do progresso atual das funcionalidades do sistema.
+
+- [✅] **Autenticação:**
+  - [✅] Login de usuário
+  - [✅] Logout seguro
+
+- [🚧] **Módulo de Venda (PDV):**
+  - [❌] Busca de produtos (por nome ou código)
+  - [❌] Adição de itens ao carrinho
+  - [❌] Cálculo de total e troco
+  - [❌] Finalização de venda (múltiplas formas de pagamento)
+  - [❌] Emissão de recibo (impressão/PDF)
+
+- [✅] **Cadastros (CRUDs):**
+  - [✅] CRUD de Produtos
+  - [✅] CRUD de Clientes
+  - [✅] CRUD de Categorias
+  - [❌] CRUD de Usuários (níveis de acesso)
+
+- [❌] **Gestão:**
+  - [❌] Controle de Estoque (baixa automática na venda)
+  - [❌] Dashboard com estatísticas rápidas
+  - [❌] Relatório de vendas
+  - [❌] Histórico de transações
+
+*(Legenda: [✅] Concluído | [🚧] Em Progresso | [❌] Não Iniciado)*
 
 
