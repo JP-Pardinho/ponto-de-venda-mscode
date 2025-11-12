@@ -14,7 +14,7 @@ Um sistema de Ponto de Venda (PDV) e controle de estoque simples, feito com intu
 * [Sobre o Projeto](#-sobre-o-projeto)
 * [Visão Geral (Screenshots)](#-visão-geral)
 * [Tecnologias Utilizadas](#-tecnologias-utilizadas)
-* [Principais funcionalidades](#-princiapais-funcionalidades)
+* [Principais funcionalidades](#-principais-funcionalidades)
 
 ---
 
@@ -31,6 +31,8 @@ Aqui estão algumas das telas principais do sistema.
 | Tela de Venda (PDV) | Dashboard | Cadastro de Produtos |
 | :---: | :---: | :---: |
 | ![Dashboard](docs/dashboard.png) | ![Tela de Produtos](docs/tela-produto.png) | ![Cadastro de Produtos](docs/cadastro-produto.png) | 
+
+[Clique aqui para ver todas as screenshots do projeto](/docs)
 
 ---
 
