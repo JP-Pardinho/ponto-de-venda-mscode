@@ -26,44 +26,27 @@
                     </li>
                 </ul>
 
+                {% include "/partials/error-mensage.html.twig" %}
                 <div class="w-100 mt-4">
-                    {% include "/partials/error-mensage.html.twig" %}
-                    <form action="{{ path('salvar_produto') }}" method="POST">
-                        <div class="mb-3">
-                            <label for="nome" class="form-label">Nome: *</label>
-                            <input type="text" class="form-control" id="nome" name="nome" required autofocus>
-                        </div>
-                        <div class="mb-3">
-                            <label for="descricao" class="form-label">Descrição:</label>
-                            <textarea class="form-control" id="descricao" name="descricao" style="resize:none;" rows="5"></textarea>
-                        </div>
+                {{ form_start(form) }}
+                    {{ form_row(form.nome, {
+                        'attr': {'autofocus': true}
+                    }) }}
+                    
+                    {{ form_row(form.descricao) }}
+                    
+                    <div class="row">
+                        <div class="col-4">{{ form_row(form.categoria) }}</div>
+                        <div class="col-4">{{ form_row(form.quantidadeEstoque) }}</div>
+                        <div class="col-4">{{ form_row(form.valor) }}</div>
+                    </div>
 
-                        <div class="row">
-                            <div class="mb-3 col-4">
-                                <label for="categoria_id" class="form-label">Categorias: *</label>
-                                <select class="form-select" aria-label="Categoria" name="categoriaId">
-                                    <option selected disabled> - - - Selecione - - - </option>
-                                    {% for categoria in categorias %}
-                                    <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-
-                            <div class="mb-3 col-4">
-                                <label for="quantidade" class="form-label">Quantidade: *</label>
-                                <input type="number" class="form-control" id="quantidade" name="quantidade" required min="1">
-                            </div>
-
-                            <div class="mb-3 col-4">
-                                <label for="valor" class="form-label">Valor: *</label>
-                                <input type="number" step="0.01" class="form-control" id="valor" name="valor" required min="1">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
-                    </form>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-lg"></i>
+                        Cadastrar
+                    </button>
+                {{ form_end(form) }}  
                 </div>
-            </div>
         </div>
     </div>
 </div>
