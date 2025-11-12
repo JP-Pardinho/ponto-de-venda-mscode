@@ -29,7 +29,7 @@ Aqui estão algumas das telas principais do sistema.
 
 | Tela de Venda (PDV) | Dashboard | Cadastro de Produtos |
 | :---: | :---: | :---: |
-| ![Tela de Venda](docs/venda.png) | ![Dashboard](docs/dashboard.png) | ![Cadastro de Produtos](docs/cadastro-produto.png) |
+| ![Dashboard](docs/dashboard.png) | ![Tela de Produtos](docs/tela-produto.png) | ![Cadastro de Produtos](docs/cadastro-produto.png) | 
 
 ---
 
