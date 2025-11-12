@@ -7,8 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ProdutoRepository::class)]
+#[UniqueEntity(
+    fields: ['nome'], 
+    message: 'Este nome de produto já existe.',
+    errorPath: 'nome'
+)]
 class Produto
 {
     #[ORM\Id]
@@ -17,12 +24,14 @@ class Produto
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'O nome não pode ficar em branco.')]
     private ?string $nome = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $descricao = null;
 
     #[ORM\Column]
+    #[Assert\Positive(message: 'A quantidade não pode ser menor ou igual a zero')]
     private ?int $quantidadeInicial = null;
 
     #[ORM\Column]
@@ -39,6 +48,7 @@ class Produto
     private Collection $vendaItems;
 
     #[ORM\Column]
+    #[Assert\Positive(message: 'O preço deve ser positivo')]
     private ?float $valor = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

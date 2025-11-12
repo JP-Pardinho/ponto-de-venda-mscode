@@ -3,7 +3,6 @@
 namespace App\Controller\Produto;
 
 use App\Entity\Produto;
-use App\Form\ProductType;
 use App\Form\ProdutoType;
 use App\Repository\CategoriaRepository;
 use App\Repository\ProdutoRepository;
@@ -12,33 +11,33 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class SalvarProdutoController extends AbstractController
+final class EditarProdutoController extends AbstractController
 {
     public function __construct(
-        private ProdutoRepository $produtoRepository
-    ) {   
+        private ProdutoRepository $produtoRepository,
+        private CategoriaRepository $categoriaRepository
+    ) {        
     }
 
-    #[Route('/produtos/salvar', name: 'salvar_produto', methods:['GET', 'POST'])]
-    public function salvar(Request $request): Response
+        #[Route('/produtos/{produto}/editar}', name: 'editar_produto', methods:['GET', 'POST'])]
+    public function editar(Produto $produto, Request $request): Response
     {
-        $produto = new Produto();
         $form = $this->createForm(ProdutoType::class, $produto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $produto->setQuantidadeInicial($produto->getQuantidadeEstoque());
-            $produto->setDataCadastro(new \DateTime());
-            $produto->setAtivo(true);
 
             $this->produtoRepository->salvar($produto);
 
-            $this->addFlash('success', 'Produto cadastrado com sucesso!');
+            $this->addFlash('success', 'Produto atualizado com sucesso!');
             return $this->redirectToRoute('listar_produtos');
         }
 
-        return $this->render('produto/new.html.twig', [
+        return $this->render('produto/edit.html.twig', [
+            'produto' => $produto,
             'form' => $form,
         ]);
     }
+
+   
 }
