@@ -16,28 +16,24 @@ class ProdutoRepository extends ServiceEntityRepository
         parent::__construct($registry, Produto::class);
     }
 
-//    /**
-//     * @return Produto[] Returns an array of Produto objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function salvar(Produto $produto): void 
+    {
+        $this->getEntityManager()->persist($produto);
+        $this->getEntityManager()->flush();
+    }
 
-//    public function findOneBySomeField($value): ?Produto
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function remover(Produto $produto) {
+        $this->getEntityManager()->remove($produto);
+        $this->getEntityManager()->flush();
+    }
+
+    public function findAllWithCategory(): array
+    {
+        return $this->createQueryBuilder('p')  
+            ->addSelect('c') 
+            ->leftJoin('p.categoria', 'c')
+            ->orderBy('p.nome', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

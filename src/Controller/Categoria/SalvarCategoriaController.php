@@ -16,26 +16,26 @@ final class SalvarCategoriaController extends AbstractController
     ) {  
     }
 
-    #[Route('/categorias/salvar', name: 'cadastrar_categoria_show', methods:'GET')]
+    #[Route('/categorias/salvar', name: 'salvar_categoria_show', methods:'GET')]
     public function show(): Response
     {
         return $this->render('categoria/new.html.twig');
     }
 
-    #[Route('/categorias/salvar', name: 'cadastrar_categoria', methods:'POST')]
+    #[Route('/categorias/salvar', name: 'salvar_categoria', methods:'POST')]
     public function new(Request $request): Response
     {
         $nomeCategoria = $request->request->get('nome');
 
         if (strlen($nomeCategoria) > 50) {
             $this->addFlash('danger', 'O nome da categoria tem que ter no máximo 50 caracteres!');
-            return $this->redirectToRoute('cadastrar_categoria_show');
+            return $this->redirectToRoute('salvar_categoria_show');
         }
 
         $categoriaExistente = $this->categoriaRepository->findOneBy(['nome' => $nomeCategoria]);
         if ($categoriaExistente) {
             $this->addFlash('danger', 'Já existe uma categoria cadastrada com esse nome!');
-            return $this->redirectToRoute('cadastrar_categoria_show');
+            return $this->redirectToRoute('salvar_categoria_show');
         }
 
         $categoria = new Categoria();

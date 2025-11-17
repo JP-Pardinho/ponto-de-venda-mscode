@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PDV - Cadastrar Produto{% endblock %}
+
+{% block body %}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="container py-5">
+                <div class="mb-4 d-flex flex-row justify-content-between">
+                    <h1><i class="bi bi-box-seam-fill"></i> Produto: id - {{ produto.id }}</h1>
+                </div>
+
+                <ul class="nav nav-tabs mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="{{ path('listar_produtos') }}">
+                            <i class="bi bi-list-ul"></i> Listar produtos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="{{ path('salvar_produto') }}">
+                            <i class="bi bi-plus"></i> Novo produto
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="w-100 mt-4">
+                    {% include "/partials/error-mensage.html.twig" %}
+                    <form>
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome:</label>
+                            <input type="text" class="form-control" value="{{ produto.nome }}" aria-label="Nome" disabled readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="descricao" class="form-label">Descrição:</label>
+                            <input type="text" class="form-control" value="{{ produto.descricao }}" aria-label="Descrição" disabled readonly>
+                        </div>
+
+                        <div class="row">
+                            <div class="mb-3 col-6">
+                                <label for="categoria_id" class="form-label">Categoria:</label>
+                                <input type="text" class="form-control" value="{{ produto.categoria.nome }}" aria-label="Categoria" disabled readonly>
+                            </div>
+
+                            <div class="mb-3 col-6">
+                                <label for="valor" class="form-label">Data cadastro:</label>
+                                <input type="text" class="form-control" value="{{ produto.dataCadastro|date('d/m/Y') }}" aria-label="Data cadastro" disabled readonly>
+                            </div>
+
+                            <div class="mb-3 col-6">
+                                <label for="quantidade" class="form-label">Quantidade:</label>
+                                <input type="text" class="form-control" value="{{ produto.quantidadeEstoque }}" aria-label="Quantidade Estoque" disabled readonly>
+                            </div>
+
+                            <div class="mb-3 col-6">
+                                <label for="valor" class="form-label">Valor:</label>
+                                <input type="text" class="form-control" value="R${{ produto.valor|number_format(2, ',', '.') }}" aria-label="Valor" disabled readonly>
+                            </div>
+                        </div>
+
+                        
+                        <a href="{{ path('listar_produtos') }}" class="btn btn-laranja mt-3 w-100">Voltar</a>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+{% endblock %}

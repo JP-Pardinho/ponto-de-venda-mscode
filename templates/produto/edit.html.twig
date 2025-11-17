@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PDV - Editar Produto{% endblock %}
+
+{% block body %}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="container py-5">
+                <div class="mb-4 d-flex flex-row justify-content-between">
+                    <h1><i class="bi bi-box-seam-fill"></i>  Editar produto: id - {{ produto.id }}</h1>
+                </div>
+
+                <ul class="nav nav-tabs mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="{{ path('listar_produtos') }}">
+                            <i class="bi bi-list-ul"></i> Listar produtos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="{{ path('salvar_produto') }}">
+                            <i class="bi bi-plus"></i> Novo produto
+                        </a>
+                    </li>
+                </ul>
+
+                {% include "/partials/error-mensage.html.twig" %}
+                <div class="w-100 mt-4">
+                {{ form_start(form) }}
+                    {{ form_row(form.nome) }}
+                    {{ form_row(form.descricao) }}
+                    
+                    <div class="row">
+                        <div class="col-4">{{ form_row(form.categoria) }}</div>
+                        <div class="col-4">{{ form_row(form.quantidadeEstoque) }}</div>
+                        <div class="col-4">{{ form_row(form.valor) }}</div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> 
+                            Cadastrar
+                        </button>
+                    </div>
+                {{ form_end(form) }}  
+                </div>
+        </div>
+    </div>
+</div>
+    
+{% endblock %}

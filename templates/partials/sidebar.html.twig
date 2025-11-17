@@ -23,17 +23,20 @@
 
     <ul class="nav nav-pills flex-column">
         <li class="nav-item">
-            <a  href="{{ path('listar_categorias') }}" 
-                class="nav-link d-flex align-items-center text-white text-decoration-none {% if current_path starts with path('listar_categorias') %}active{% endif %}">
+            <a href="{{ path('listar_categorias') }}" 
+               class="nav-link d-flex align-items-center text-white text-decoration-none 
+               {% if current_path starts with path('listar_categorias') %}active{% endif %}">
                 <i class="bi bi-tags fs-4 me-2"></i>
                 Categorias
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="" class="nav-link d-flex align-items-center text-white text-decoration-none">
+            <a href="{{ path('listar_produtos') }}" 
+               class="nav-link d-flex align-items-center text-white text-decoration-none
+               {% if current_path starts with path('listar_produtos') %}active{% endif %}">
                 <i class="bi bi-box-seam fs-4 me-2"></i>
-                Estoque
+                Produtos
             </a>
         </li>
 
