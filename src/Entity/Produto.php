@@ -31,10 +31,10 @@ class Produto
     private ?string $descricao = null;
 
     #[ORM\Column]
-    #[Assert\Positive(message: 'A quantidade não pode ser menor ou igual a zero')]
     private ?int $quantidadeInicial = null;
 
     #[ORM\Column]
+    #[Assert\Positive(message: 'A quantidade não pode ser menor ou igual a zero')]
     private ?int $quantidadeEstoque = null;
 
     #[ORM\ManyToOne(inversedBy: 'produtos')]
