@@ -34,7 +34,7 @@ class Produto
     private ?int $quantidadeInicial = null;
 
     #[ORM\Column]
-    #[Assert\Positive(message: 'A quantidade não pode ser menor ou igual a zero')]
+    #[Assert\Positive(message: 'A quantidade deve ser maior que zero')]
     private ?int $quantidadeEstoque = null;
 
     #[ORM\ManyToOne(inversedBy: 'produtos')]
@@ -48,7 +48,7 @@ class Produto
     private Collection $vendaItems;
 
     #[ORM\Column]
-    #[Assert\Positive(message: 'O preço deve ser positivo')]
+    #[Assert\Positive(message: 'O preço deve ser maior que zero')]
     private ?float $valor = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
