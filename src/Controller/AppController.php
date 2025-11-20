@@ -22,9 +22,15 @@ final class AppController extends AbstractController
         $categorias = $this->categoriaRepository->findAll();
         $produtos = $this->produtoRepository->findAll();
 
-        return $this->render('/dashboard/index.html.twig', [
+        return $this->render('/app/index.html.twig', [
             'categorias' => $categorias,
             'produtos' => $produtos,
         ]);
+    }
+
+    #[Route('/sobre', name: 'app_sobre')]
+    public function sobre(): Response
+    {
+        return $this->render('app/sobre.html.twig');
     }
 }

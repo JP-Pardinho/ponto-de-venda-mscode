@@ -1,20 +1,19 @@
 <?php
 
-namespace App\Controller\Produto;
+namespace App\Controller\Produto\Remover;
 
 use App\Entity\Produto;
-use App\Repository\ProdutoRepository;
-use App\Service\Produto\VerificaProdutoVendidoException;
+use App\Service\Produto\ProdutoService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Throwable;
 
 
-final class RemoverProdutoController extends AbstractController
+final class Controller extends AbstractController
 {
     public function __construct(
-        private ProdutoRepository $produtoRepository
+        private ProdutoService $produtoService
     ) {     
     }
 
@@ -22,10 +21,8 @@ final class RemoverProdutoController extends AbstractController
     public function remover(Produto $produto): Response
     {    
         try {
-            if (!$produto->getVendaItems()->isEmpty()) {
-                throw new VerificaProdutoVendidoException(); 
-            }
-            $this->produtoRepository->remover($produto);
+            $this->produtoService->removerOuInativar($produto);
+            $this->addFlash('success', 'Produto excluído.');
         } catch (Throwable $e) {
             $this->addFlash('danger', $e->getMessage());
         }

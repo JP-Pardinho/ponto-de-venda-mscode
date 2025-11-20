@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Controller\Produto;
+namespace App\Controller\Produto\Salvar;
 
 use App\Entity\Produto;
-use App\Form\ProductType;
 use App\Form\ProdutoType;
-use App\Repository\CategoriaRepository;
-use App\Repository\ProdutoRepository;
+use App\Service\Produto\ProdutoService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class SalvarProdutoController extends AbstractController
+final class Controller extends AbstractController
 {
     public function __construct(
-        private ProdutoRepository $produtoRepository
+        private ProdutoService $produtoService
     ) {   
     }
 
@@ -27,11 +25,7 @@ final class SalvarProdutoController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $produto->setQuantidadeInicial($produto->getQuantidadeEstoque());
-            $produto->setDataCadastro(new \DateTime());
-            $produto->setAtivo(true);
-
-            $this->produtoRepository->salvar($produto);
+            $this->produtoService->criar($produto);
 
             $this->addFlash('success', 'Produto cadastrado com sucesso!');
             return $this->redirectToRoute('listar_produtos');
