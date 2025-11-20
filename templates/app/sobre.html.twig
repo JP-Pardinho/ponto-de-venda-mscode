@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sobre o Sistema{% endblock %}
+
+{% block body %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="container py-5">
+                <div class="mb-4 d-flex flex-row justify-content-between">
+                    <h1>
+                        <i class="bi bi-info-circle"></i>
+                        Sobre o projeto
+                    </h1>
+                </div>
+
+                <p class="card-text mt-3" style="text-align: justify;">
+                    Este projeto consiste no desenvolvimento de um Sistema de Ponto de Venda (PDV) completo, 
+                    criado para aplicar na prática conceitos avançados de Engenharia de Software e arquitetura MVC.
+                    O objetivo é fornecer uma solução leve e intuitiva para o controle de vendas e gestão de estoque, 
+                    permitindo que pequenos estabelecimentos gerenciem suas operações diárias com eficiência e segurança.
+                </p>
+
+                <div class="card shadow-sm mt-5 w-100">
+                    <div class="card-header bg-secondary text-white d-flex">
+                        <h5 class="mb-0">Ambiente Técnico</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Versão do PHP:</strong> 8.2^</p>
+                        <p><strong>Versão do Symfony:</strong> 7.3.*</p>
+                        <p><strong>Curso:</strong> MS Code - 2025</p>
+                         <a href="https://github.com/JP-Pardinho/ponto-de-venda-mscode" target="_blank" class="btn btn-laranja btn-sm text-black">
+                                Acessar Repositório no GitHub
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+   </div>         
+</div>
+{% endblock %}
