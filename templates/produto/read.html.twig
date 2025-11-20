@@ -9,7 +9,7 @@
         <div class="card shadow-sm">
             <div class="container py-5">
                 <div class="mb-4 d-flex flex-row justify-content-between">
-                    <h1><i class="bi bi-box-seam-fill"></i> Produto: id - {{ produto.id }}</h1>
+                    <h1><i class="bi bi-box-seam-fill"></i> Produto - #{{ produto.id }}</h1>
                 </div>
 
                 <ul class="nav nav-tabs mb-3">
@@ -60,10 +60,8 @@
                                 <input type="text" class="form-control" value="R${{ produto.valor|number_format(2, ',', '.') }}" aria-label="Valor" disabled readonly>
                             </div>
                         </div>
-
                         
-                        <a href="{{ path('listar_produtos') }}" class="btn btn-laranja mt-3 w-100">Voltar</a>
-
+                        <a href="{{ path('listar_produtos') }}" class="btn btn-primary mt-3 w-100">Voltar</a>
                     </form>
                 </div>
             </div>
