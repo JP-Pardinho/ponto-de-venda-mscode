@@ -3,6 +3,7 @@
 namespace App\Service\Produto;
 
 use App\Entity\Produto;
+use App\Exception\Categoria\CategoriaQuantidadeInvalidaException;
 use App\Exception\Produto\ProdutoJaVendidoException;
 use App\Repository\ProdutoRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,7 +32,7 @@ class ProdutoService
 
     public function removerOuInativar(Produto $produto): void 
     {
-        if (! $produto->getVendaItems()->isEmpty()) {
+        if (!$produto->getVendaItems()->isEmpty()) {
             $produto->setAtivo(false);
             $this->entityManager->flush();
             
@@ -41,4 +42,16 @@ class ProdutoService
         $this->produtoRepository->remover($produto);
     }
 
+    public function editarQuantidade(Produto $produto, int $quantidade): void
+    {
+
+        if ($quantidade <= 0) {
+            throw new CategoriaQuantidadeInvalidaException();
+        }
+
+        $novoEstoque = $produto->getQuantidadeEstoque() + $quantidade;
+        $produto->setQuantidadeEstoque($novoEstoque);
+
+        $this->produtoRepository->salvar($produto);
+    }
 }

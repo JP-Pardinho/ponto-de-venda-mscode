@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}PDV - Editar Produto{% endblock %}
+{% block title %}PDV - Editar Estoque{% endblock %}
 
 {% block body %}
 
@@ -9,7 +9,7 @@
         <div class="card shadow-sm">
             <div class="container py-5">
                 <div class="mb-4 d-flex flex-row justify-content-between">
-                    <h1><i class="bi bi-box-seam-fill"></i>  Editar produto - #{{ produto.id }}</h1>
+                    <h1><i class="bi bi-box-seam-fill"></i>  Editar estoque - #{{ produto.id }}</h1>
                 </div>
 
                 <ul class="nav nav-tabs mb-3">
@@ -29,29 +29,14 @@
                 {% include "/partials/error-mensage.html.twig" %}
                 <div class="w-100 mt-4">
                 {{ form_start(form) }}
-                    {{ form_row(form.nome) }}
-                    {{ form_row(form.descricao) }}
-                    
-                    <div class="row">
-                        <div class="col-4">{{ form_row(form.categoria) }}</div>
-                        <div class="col-4"> 
-                            <label for="nome" class="form-label">Quantidade:</label>
-                             <input type="text" class="form-control" value="{{ produto.quantidadeEstoque }}" aria-label="Nome" disabled readonly>
-                        </div>
-                        <div class="col-4 d-none">{{ form_row(form.quantidadeEstoque) }}</div>
-                        <div class="col-4">{{ form_row(form.valor) }}</div>
-                    </div>
+                    {{ form_row(form.quantidadeAdicional) }}
 
                     <div class="d-flex justify-content-end">
 
-                        <a href="{{ path('editar_estoque_produto', {produto: produto.id}) }}" class="btn btn-secondary me-2" > 
-                            <i class="bi bi-plus"></i>
-                            Alterar quantidade em estoque
-                        </a>
 
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-check-lg"></i> 
-                            Cadastrar
+                            Alterar estoque
                         </button>
                     </div>
                 {{ form_end(form) }}  
