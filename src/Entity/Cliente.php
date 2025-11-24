@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\ClienteRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ClienteRepository::class)]
@@ -26,6 +28,12 @@ class Cliente
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $telefone = null;
+
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private ?bool $ativo = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?\DateTimeImmutable $createdAt = null;
 
     /**
      * @var Collection<int, Venda>
@@ -90,6 +98,29 @@ class Cliente
 
         return $this;
     }
+
+        public function isAtivo(): ?bool
+    {
+        return $this->ativo;
+    }
+
+    public function setAtivo(bool $ativo): static
+    {
+        $this->ativo = $ativo;
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
 
     /**
      * @return Collection<int, Venda>
