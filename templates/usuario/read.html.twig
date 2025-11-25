@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PDV - Cadastrar Produto{% endblock %}
+
+{% block body %}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="container py-5">
+                <div class="mb-4 d-flex flex-row justify-content-between">
+                    <h1>
+                        <i class="bi bi-person-circle"></i>  
+                        Usuario - #{{ usuario.id }}
+                    </h1>
+                </div>
+
+                <ul class="nav nav-tabs mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="{{ path('listar_usuarios') }}">
+                            <i class="bi bi-list-ul"></i> Listar usuarios
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="#">
+                            <i class="bi bi-plus"></i> Novo usuario
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="w-100 mt-4">
+                    {% include "/partials/error-mensage.html.twig" %}
+                    <form>
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome:</label>
+                            <input type="text" class="form-control" value="{{ usuario.nome }}" aria-label="Nome" disabled readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="descricao" class="form-label">Email:</label>
+                            <input type="text" class="form-control" value="{{ usuario.email }}" aria-label="Descrição" disabled readonly>
+                        </div>
+
+ 
+                        <div class="mb-3">
+                            <label for="categoria_id" class="form-label">Cargo:</label>
+                            <input type="text" class="form-control" value="{{ usuario.roles[0] }}" aria-label="Categoria" disabled readonly>
+                        </div>
+                        
+                        <a href="javascript:history.back()" class="btn btn-primary mt-3 w-100">Voltar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+{% endblock %}
