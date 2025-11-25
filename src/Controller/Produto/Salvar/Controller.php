@@ -31,7 +31,7 @@ final class Controller extends AbstractController
             return $this->redirectToRoute('listar_produtos');
         }
 
-        return $this->render('produto/new.html.twig', [
+        return $this->render('usuario/new.html.twig', [
             'form' => $form,
         ]);
     }
