@@ -8,8 +8,14 @@
             "mercure-turbo-stream": {
                 "enabled": false,
                 "fetch": "eager"
-            }
-        }
+            },        
+        
+            "pdv": {
+                "enabled": true,
+                "fetch": "eager"
+              }
+            
+          }
     },
     "entrypoints": []
 }

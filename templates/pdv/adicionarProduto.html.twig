@@ -1,0 +1,393 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PDV - Adicionar Produto
+{% endblock %}
+
+{% block body %}
+	<div class="row mt-4">
+
+		<div class="col-12 card shadow-sm p-4">
+
+			<div class="mb-4 d-flex flex-row justify-content-start align-items-center">
+				<h1>
+					<i class="bi bi-basket"></i>
+					Ponto de Venda — Adicionar Produto</h1>
+			</div>
+
+			<div class="input-group mb-4">
+				<input id="input-codigo" type="text" class="form-control" placeholder="Digite código ou nome do produto">
+				<button id="btn-buscar" class="btn btn-primary">
+					<i class="bi bi-search"></i>
+					Buscar
+				</button>
+			</div>
+
+			<div id="alerta-estoque" class="alert d-none"></div>
+
+			<div id="resultado-busca" class="p-3 d-none border rounded"></div>
+
+			<h4 class="mt-5">Itens da Venda</h4>
+
+			<table class="table mt-3">
+				<thead>
+					<tr>
+						<th>Produto</th>
+						<th>Qtde</th>
+						<th>Preço</th>
+						<th>Subtotal</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody id="cart-body">
+					<tr class="empty-row">
+						<td colspan="5" class="text-muted">Nenhum item adicionado</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="d-flex justify-content-between align-items-center mt-4">
+				<h4>Total:
+					<span id="cart-total">R$ 0,00</span>
+				</h4>
+				<button id="btn-finalizar" class="btn btn-success" disabled>
+					<i class="bi bi-check-circle"></i>
+					Finalizar</button>
+			</div>
+
+		</div>
+
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+	
+	  // ==========================
+	  // 🔥 LISTA DE PRODUTOS MOCK
+	  // ==========================
+	  const MOCK_PRODUTOS = [
+	    { id: 1, nome: "Pão Francês", codigo: "0001", preco: 0.50, estoque: 10 },
+	    { id: 2, nome: "Leite Integral", codigo: "0002", preco: 4.99, estoque: 3 },
+	    { id: 3, nome: "Café Torrado", codigo: "0003", preco: 12.50, estoque: 1 },
+	    { id: 4, nome: "Refrigerante Cola 2L", codigo: "0100", preco: 7.80, estoque: 0 },
+	    { id: 5, nome: "Arroz Tipo 1 - 5kg", codigo: "0200", preco: 21.90, estoque: 8 },
+	    { id: 6, nome: "Caneta Azul", codigo: "9999", preco: 1.50, estoque: 50 } 
+	  ];
+	
+	  // normaliza string: remove acentos, deixa minúscula e trim
+	  function normalizeStr(s){
+	    if(!s) return '';
+	    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+	  }
+	
+	  function formatBR(n){ return Number(n).toFixed(2).replace('.', ','); }
+	
+	  // Referências dos Elementos
+	  const input = document.getElementById("input-codigo");
+	  const btnBusca = document.getElementById("btn-buscar");
+	  // Outras referências...
+	  const alerta = document.getElementById("alerta-estoque");
+	  const resultado = document.getElementById("resultado-busca");
+	  const cartBody = document.getElementById("cart-body");
+	  const cartTotal = document.getElementById("cart-total");
+	  const btnFinalizar = document.getElementById("btn-finalizar");
+	  
+	  let carrinho = [];
+	
+	  /**
+	   * Função para buscar produtos, agora retorna uma lista de correspondências
+	   */
+	  function buscarProdutos(texto){
+	    texto = normalizeStr(texto);
+	    if(!texto) return [];
+	
+	    // Prioriza busca por código exato (retorna array de 1 item)
+	    const porCodigo = MOCK_PRODUTOS.find(p => normalizeStr(p.codigo) === texto);
+	    if(porCodigo) return [porCodigo];
+	
+	    // Busca por nome (contém o termo) ou código parcial
+	    return MOCK_PRODUTOS.filter(p => 
+	      normalizeStr(p.nome).includes(texto) || normalizeStr(p.codigo).includes(texto)
+	    );
+	  }
+	
+	  /**
+	   * Adiciona ou atualiza um item no carrinho após a quantidade ser solicitada.
+	   */
+	  function adicionarCarrinho(prod, quantidade = 1){
+	    const qtdDesejada = Number(quantidade);
+	
+	    if (isNaN(qtdDesejada) || qtdDesejada <= 0) {
+	        alerta.classList.remove("d-none", "alert-success");
+	        alerta.classList.add("alert-danger");
+	        alerta.innerText = `🛑 ERRO: Quantidade inválida (${quantidade}).`;
+	        return false;
+	    }
+	
+	    // Validação de Estoque
+	    const itemExistente = carrinho.find(i => i.id === prod.id);
+	    const qtdAtual = itemExistente ? itemExistente.qtd : 0;
+	    
+	    // Verifica se a nova soma excede o estoque
+	    if (qtdAtual + qtdDesejada > prod.estoque) {
+	        alerta.classList.remove("d-none", "alert-info", "alert-success");
+	        alerta.classList.add("alert-danger");
+	        alerta.innerText = `🛑 ERRO: Adicionar ${qtdDesejada} excederia o estoque disponível para ${prod.nome} (Máximo: ${prod.estoque - qtdAtual}).`;
+	        return false;
+	    }
+	
+	    // Adiciona o item
+	    if(itemExistente) {
+	        itemExistente.qtd += qtdDesejada;
+	    } else {
+	        carrinho.push({ ...prod, qtd: qtdDesejada });
+	    }
+	    
+	    alerta.classList.add("d-none");
+	    atualizarCarrinho();
+	    return true;
+	  }
+	  
+	  function atualizarCarrinho(){
+	    if(carrinho.length === 0){
+	      cartBody.innerHTML = `
+	        <tr class="empty-row">
+	          <td colspan="5" class="text-muted">Nenhum item adicionado</td>
+	        </tr>
+	      `;
+	      cartTotal.innerText = "R$ 0,00";
+	      btnFinalizar.disabled = true;
+	      return;
+	    }
+	
+	    cartBody.innerHTML = carrinho.map(item => `
+	      <tr>
+	        <td><strong>${item.nome}</strong><br><small class="text-muted">Código: ${item.codigo}</small></td>
+	        <td>
+	            ${item.qtd}
+	            <button class="btn btn-sm btn-outline-secondary ms-2" 
+	                    title="Editar quantidade"
+	                    onclick="window.editarItemQuantidade(${item.id})">
+	                <i class="bi bi-pencil"></i>
+	            </button>
+	        </td>
+	        <td>R$ ${formatBR(item.preco)}</td>
+	        <td>R$ ${formatBR(item.qtd * item.preco)}</td>
+	        <td>
+	          <button class="btn btn-sm btn-danger" onclick="window.removerItem(${item.id})">
+	            <i class="bi bi-trash"></i>
+	          </button>
+	        </td>
+	      </tr>
+	    `).join("");
+	
+	    const total = carrinho.reduce((s, i) => s + i.preco * i.qtd, 0);
+	    cartTotal.innerText = "R$ " + formatBR(total);
+	    btnFinalizar.disabled = false;
+	  }
+	    
+	  /**
+	   * 🔑 NOVO: Permite ao operador alterar a quantidade de um item já adicionado.
+	   */
+	  window.editarItemQuantidade = function(id){
+	    const item = carrinho.find(i => i.id === id);
+	    if (!item) return;
+	
+	    // 1. Solicitar a nova quantidade
+	    let novaQuantidadeStr = prompt(`Alterar quantidade para "${item.nome}" (Estoque: ${item.estoque}):`, item.qtd);
+	
+	    if (novaQuantidadeStr === null) {
+	        alerta.classList.add("d-none");
+	        return; // Usuário cancelou
+	    }
+	
+	    const novaQuantidade = Number(novaQuantidadeStr);
+	
+	    // 2. Validação básica
+	    if (isNaN(novaQuantidade) || novaQuantidade <= 0) {
+	        alerta.classList.remove("d-none", "alert-success");
+	        alerta.classList.add("alert-danger");
+	        alerta.innerText = `🛑 ERRO: Quantidade inválida.`;
+	        return;
+	    }
+	    
+	    // 3. Validação de Estoque (Se a nova quantidade exceder o total disponível)
+	    if (novaQuantidade > item.estoque) {
+	        alerta.classList.remove("d-none", "alert-info", "alert-success");
+	        alerta.classList.add("alert-danger");
+	        alerta.innerText = `🛑 ERRO: A nova quantidade (${novaQuantidade}) excede o estoque disponível (${item.estoque}) para ${item.nome}.`;
+	        return;
+	    }
+	    
+	    // 4. Aplicar a alteração
+	    item.qtd = novaQuantidade;
+	    
+	    // 5. Atualizar interface
+	    alerta.classList.add("d-none");
+	    atualizarCarrinho();
+	
+	    // Feedback de sucesso
+	    alerta.classList.remove("d-none", "alert-danger", "alert-info");
+	    alerta.classList.add("alert-success");
+	    alerta.innerText = `✅ Quantidade de ${item.nome} alterada para ${novaQuantidade}.`;
+	  }
+	
+	
+	  window.removerItem = function(id){
+	    carrinho = carrinho.filter(i => i.id !== id);
+	    atualizarCarrinho();
+	  }
+	
+	  /**
+	   * 🔑 NOVO: Trata a adição de um produto encontrado (solicita quantidade)
+	   */
+	  function handleProductAdd(prod) {
+	    // 1. Solicitar Quantidade IMEDIATAMENTE (como pedido)
+	    let quantidade = prompt(`Digite a quantidade para "${prod.nome}" (Estoque: ${prod.estoque}):`, 1);
+	
+	    if (quantidade === null) {
+	        // Usuário cancelou
+	        alerta.classList.remove("d-none", "alert-success", "alert-danger");
+	        alerta.classList.add("alert-warning");
+	        alerta.innerText = `Adição de ${prod.nome} cancelada.`;
+	        return;
+	    }
+	
+	    // 2. Tenta adicionar ao carrinho
+	    const sucesso = adicionarCarrinho(prod, quantidade);
+	
+	    // 3. Feedback e limpeza
+	    if (sucesso) {
+	        input.value = ''; // Limpa o campo
+	        resultado.classList.add("d-none"); // Esconde as sugestões
+	        
+	        alerta.classList.remove("d-none", "alert-info", "alert-danger");
+	        alerta.classList.add("alert-success");
+	        alerta.innerText = `✅ ${quantidade}x ${prod.nome} adicionado(s) com sucesso.`;
+	    }
+	  }
+	
+	  /**
+	   * Função principal de Busca (chamada por Enter ou Clique no Botão)
+	   */
+	  function buscar(){
+	    const texto = input.value || '';
+	    const textoNormalizado = normalizeStr(texto);
+	    const produtosEncontrados = buscarProdutos(texto);
+	
+	    alerta.classList.add("d-none");
+	    alerta.innerHTML = "";
+	    resultado.classList.add("d-none"); // Esconde sugestões
+	
+	    if (produtosEncontrados.length === 1) {
+	        // Encontrou UM produto (por código exato, nome exato ou termo único)
+	        handleProductAdd(produtosEncontrados[0]);
+	
+	    } else if (produtosEncontrados.length > 1) {
+	        // Encontrou MÚLTIPLOS produtos (busca parcial)
+	        alerta.classList.remove("d-none", "alert-warning", "alert-danger");
+	        alerta.classList.add("alert-info");
+	        alerta.innerText = "Múltiplos produtos encontrados. Selecione um na lista de sugestões (digite mais).";
+	
+	    } else {
+	        // Não encontrou nada
+	        alerta.classList.remove("d-none", "alert-warning", "alert-danger");
+	        alerta.classList.add("alert-info");
+	        alerta.innerText = "Nenhum produto encontrado.";
+	    }
+	  }
+	
+	/**
+	   * Função de Busca em Tempo Real (Live Search)
+	   */
+	  function liveSearch(){
+	    const texto = input.value || '';
+	    const produtosEncontrados = buscarProdutos(texto);
+	
+	    // Limpa alertas
+	    alerta.classList.add("d-none");
+	    alerta.innerHTML = "";
+	    
+	    if (texto.length === 0 || produtosEncontrados.length === 0) {
+	        resultado.classList.add("d-none");
+	        resultado.innerHTML = "";
+	        return;
+	    }
+	
+	    resultado.classList.remove("d-none");
+	    // ✅ CORREÇÃO AQUI: Formatação da lista de sugestões simplificada
+	    resultado.innerHTML = `
+	        <p class="text-muted">Sugestões (${produtosEncontrados.length}):</p>
+	        ${produtosEncontrados.map(p => `
+	            <div class="d-flex justify-content-between align-items-center mb-2 p-2 border-bottom suggestion-item" 
+	                 data-product-id="${p.id}"
+	                 style="cursor: pointer;">
+	                <div>
+	                    <strong>${p.nome}</strong> 
+	                    <span class="text-muted">| Cód: ${p.codigo}</span>
+	                </div>
+	                <div class="text-end">
+	                    <strong>R$ ${formatBR(p.preco)}</strong>
+	                    <button class="btn btn-sm btn-outline-success ms-3 btn-add-suggestion">
+	                        Adicionar
+	                    </button>
+	                </div>
+	            </div>
+	        `).join("")}
+	    `;
+	
+	    // Anexa evento de clique para cada sugestão
+	    resultado.querySelectorAll('.suggestion-item').forEach(item => {
+	        item.onclick = function() {
+	            const id = parseInt(this.getAttribute('data-product-id'));
+	            const prod = MOCK_PRODUTOS.find(p => p.id === id);
+	            
+	            // Auto-completa o input com o nome do produto selecionado
+	            input.value = prod.nome;
+	            
+	            // Aciona a adição do produto (pede a quantidade)
+	            handleProductAdd(prod);
+	        };
+	    });
+	  }
+	
+	  // ==========================
+	  // Anexação de Eventos
+	  // ==========================
+	
+	  // 1. Evento de Clique do Botão (Buscar)
+	  if (btnBusca) {
+	      btnBusca.addEventListener('click', buscar);
+	  }
+	
+	  // 2. Evento de Tecla (Enter) e Live Search (keyup)
+	  if (input) {
+	      input.addEventListener("keydown", function(e){
+	        if(e.key === "Enter"){
+	          e.preventDefault();
+	          buscar(); // Chama a busca principal
+	        }
+	      });
+	      
+	      // Live Search (Busca em tempo real)
+	      input.addEventListener("keyup", function(e){
+	        // Ignora teclas de navegação
+	        if(e.key === "Enter" || e.key === "ArrowUp" || e.key === "ArrowDown") return; 
+	        
+	        liveSearch();
+	      });
+	  }
+	
+	
+	  // Inicializa o carrinho
+	  atualizarCarrinho();
+	
+	  console.log("PDV: Sistema totalmente funcional (Adição Imediata, Edição de Quantidade e Live Search).");
+	
+	});
+	</script>
+	
+	{% endblock %}
