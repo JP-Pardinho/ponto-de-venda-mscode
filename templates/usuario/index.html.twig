@@ -22,7 +22,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="#">
+                        <a class="nav-link text-black" href="{{ path('salvar_usuario') }}">
                             <i class="bi bi-plus"></i> Novo usuario
                         </a>
                     </li>
@@ -55,14 +55,14 @@
                                         <a type="button"
                                            class="btn btn-primary btn-sm flex-fill"
                                            title="Vizualizar"
-                                           href="{{ path('ver_usuario', {usuario: usuario.id}) }}">
+                                           href="{{ path('ver_usuario', {id: usuario.id}) }}">
                                             <i class="bi bi-eye"></i>
                                         </a>
                                         
                                         <a type="button"
                                            class="btn btn-secondary btn-sm flex-fill"
                                            title="Editar"
-                                           href="#">
+                                           href="{{ path('editar_usuario', {usuario: usuario.id}) }}">
                                             <i class="bi bi-pencil"></i>
                                         </a>
 
