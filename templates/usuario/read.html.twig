@@ -18,13 +18,25 @@
                 <ul class="nav nav-tabs mb-3">
                     <li class="nav-item">
                         <a class="nav-link text-black" href="{{ path('listar_usuarios') }}">
-                            <i class="bi bi-list-ul"></i> Listar usuarios
+                            <i class="bi bi-list-ul"></i> Listar usuários
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="#">
-                            <i class="bi bi-plus"></i> Novo usuario
+                        <a class="nav-link text-black" href="{{ path('salvar_usuario') }}">
+                            <i class="bi bi-plus"></i> Novo usuário
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="{{ path('editar_usuario', {usuario: usuario.id}) }}">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black active" href="{{ path('ver_usuario', {id: usuario.id}) }}">
+                            <i class="bi bi-eye"></i> Vizualizar
                         </a>
                     </li>
                 </ul>
@@ -45,7 +57,7 @@
  
                         <div class="mb-3">
                             <label for="categoria_id" class="form-label">Cargo:</label>
-                            <input type="text" class="form-control" value="{{ usuario.roles[0] }}" aria-label="Categoria" disabled readonly>
+                            <input type="text" class="form-control" value="{{ 'ROLE_ADMIN' in usuario.roles ? 'Administrador' : 'Operador' }}" aria-label="Categoria" disabled readonly>
                         </div>
                         
                         <a href="javascript:history.back()" class="btn btn-primary mt-3 w-100">Voltar</a>

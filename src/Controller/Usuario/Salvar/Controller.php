@@ -22,7 +22,10 @@ final class Controller extends AbstractController
     public function salvar(Request $request): Response
     {
         $usuario = new Usuario();
-        $form = $this->createForm(UsuarioType::class, $usuario);
+        $form = $this->createForm(UsuarioType::class, $usuario, [
+            'is_edit' => false,
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
