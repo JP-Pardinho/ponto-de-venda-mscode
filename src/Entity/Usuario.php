@@ -6,11 +6,17 @@ use App\Repository\UsuarioRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UsuarioRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(
+    fields: ['email'], 
+    message: 'Este e-mail já está cadastrado no sistema.',
+    errorPath: 'email' // Garante que o erro apareça embaixo do campo email
+)]
 class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -41,6 +47,9 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Venda::class, mappedBy: 'usuario')]
     private Collection $vendas;
+
+    #[ORM\Column]
+    private ?bool $ativo = true;
 
     public function __construct()
     {
@@ -92,8 +101,8 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        
+        $roles[] = 'ROLE_USER';        
 
         return array_unique($roles);
     }
@@ -168,5 +177,30 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function isAtivo(): ?bool
+    {
+        return $this->ativo;
+    }
+
+    public function setAtivo(bool $ativo): static
+    {
+        $this->ativo = $ativo;
+
+        return $this;
+    }
+
+    public function getCargo(): string
+    {
+        if ($this->ativo === false) {
+            return 'Inativo';
+        }
+
+        if (in_array('ROLE_ADMIN', $this->roles)) {
+            return 'Administrador';
+        }
+
+        return 'Operador';
     }
 }

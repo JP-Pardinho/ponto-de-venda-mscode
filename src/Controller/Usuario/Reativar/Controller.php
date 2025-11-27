@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Usuario\Remover;
+namespace App\Controller\Usuario\Reativar;
 
 use App\Entity\Usuario;
 use App\Service\Usuario\UsuarioService;
@@ -15,10 +15,10 @@ final class Controller extends AbstractController
     ) {
     }
 
-    #[Route('/usuarios/remover/{usuario}', name: 'remover_usuario')]
+    #[Route('/usuarios/reativar/{usuario}', name: 'reativar_usuario', methods:'POST')]
     public function remover(Usuario $usuario): Response
     {
-        $this->usuarioService->inativar($usuario);
+        $this->usuarioService->reativar($usuario);
         $this->addFlash('success', 'Usuário removido com sucesso!');
 
         return $this->redirectToRoute('listar_usuarios');
