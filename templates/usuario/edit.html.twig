@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}PDV - Editar Produto{% endblock %}
+{% block title %}PDV - Editar Usuário{% endblock %}
 
 {% block body %}
 
@@ -9,44 +9,79 @@
         <div class="card shadow-sm">
             <div class="container py-5">
                 <div class="mb-4 d-flex flex-row justify-content-between">
-                    <h1>
-                        <i class="bi bi-person-circle"></i> 
-                        Editar usuario
-                    </h1>
+                    <h1><i class="bi bi-pencil-fill"></i> Editar Usuário: {{ usuario.nome }}</h1>
                 </div>
 
                 <ul class="nav nav-tabs mb-3">
                     <li class="nav-item">
                         <a class="nav-link text-black" href="{{ path('listar_usuarios') }}">
-                            <i class="bi bi-list-ul"></i> Listar usuarios
+                            <i class="bi bi-list-ul"></i> Listar usuários
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="{{ path('salvar_usuario') }}">
+                            <i class="bi bi-plus"></i> Novo usuário
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="bi bi-pencil"></i> Editar
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="{{ path('salvar_usuario') }}">
-                            <i class="bi bi-plus"></i> Novo usuario
+                        <a class="nav-link text-black" href="{{ path('ver_usuario', {id: usuario.id}) }}">
+                            <i class="bi bi-eye"></i> Vizualizar
                         </a>
                     </li>
                 </ul>
 
                 {% include "/partials/error-mensage.html.twig" %}
+                
                 <div class="w-100 mt-4">
-                {{ form_start(form) }}
-                    {{ form_row(form.nome) }}
-                    {{ form_row(form.email) }}
+                      <div class="alert alert-info mt-2">
+                        <i class="bi bi-info-circle"></i> Deixe os campos de senha em branco se não quiser alterá-la.
+                    </div>
+
+                    {{ form_start(form) }}
                     
                     <div class="row">
-                        {# <div class="col-4">{{ form_row(form.categoria) }}</div> #}
+                        <div class="col-md-6">
+                            {{ form_row(form.nome) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.email) }}
+                        </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.plainPassword.first) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.plainPassword.second) }}
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            {{ form_row(form.roles) }}
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
 
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-lg"></i> 
-                            Cadastrar
+                            <i class="bi bi-check-lg"></i>
+                            Salvar Alterações
                         </button>
                     </div>
-                {{ form_end(form) }}  
+
+                    {{ form_end(form) }}  
                 </div>
+            </div>
         </div>
     </div>
 </div>

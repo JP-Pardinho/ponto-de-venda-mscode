@@ -20,16 +20,20 @@ final class Controller extends AbstractController
     #[Route('/usuarios/editar/{usuario}', name: 'editar_usuario', methods:['GET', 'POST'])]
     public function editar(Usuario $usuario, Request $request): Response
     {
-        $form = $this->createForm(UsuarioType::class, $usuario);
+        $form = $this->createForm(UsuarioType::class, $usuario, [
+            'is_edit' => true,
+        ]);
+    
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
-            $this->usuarioService->editar($usuario);
-            $this->addFlash('success', 'Usuario editado com sucesso!');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $plainPassword = $form->get('plainPassword')->getData();
 
+            $this->usuarioService->editar($usuario, $plainPassword);
+            $this->addFlash('success', 'Usuário atualizado com sucesso!');
             return $this->redirectToRoute('listar_usuarios');
         }
-        
+
         return $this->render('usuario/edit.html.twig', [
             'usuario' => $usuario,
             'form' => $form,
