@@ -23,7 +23,7 @@ final class Controller extends AbstractController
         if (!$this->isGranted('ROLE_ADMIN')) {
             $this->addFlash('danger', 'Acesso negado. Área restrita a administradores.');
             return $this->render('erro/erro.html.twig', [
-                'erro' => '401'
+                'erro' => Response::HTTP_FORBIDDEN
             ]);
         }
 
