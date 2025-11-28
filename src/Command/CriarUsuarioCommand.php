@@ -30,6 +30,7 @@ class CriarUsuarioCommand extends Command
             ->addArgument('email', InputArgument::REQUIRED)
             ->addArgument('senha', InputArgument::REQUIRED)
             ->addArgument('nome', InputArgument::REQUIRED)
+            ->addOption('admin', null, InputOption::VALUE_NONE)
         ;
     }
 
@@ -38,17 +39,20 @@ class CriarUsuarioCommand extends Command
         $email = $input->getArgument('email');
         $senha = $input->getArgument('senha');
         $nome = $input->getArgument('nome');
+        $isAdmin = $input->getOption('admin');
 
      if (empty($email) || empty($senha)) {
         throw new \InvalidArgumentException('Informe o e-mail e senha!');
      }
 
      $usuario = new Usuario();
+     $roles = $isAdmin ? ['ROLE_ADMIN', 'ROLE_USER'] : ['ROLE_USER'];
+
      $usuario
         ->setEmail($email)
         ->setPassword($this->userPasswordHasher->hashPassword($usuario, $senha))
         ->setNome($nome)
-        ->setRoles(['ROLE_USER']);
+        ->setRoles($roles);
 
         $this->usuarioRepository->salvar($usuario);
 
