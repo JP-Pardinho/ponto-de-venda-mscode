@@ -2,9 +2,9 @@
 
 namespace App\Exception\Usuario;
 
-use Exception;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 
-class UsuarioInativoException extends Exception
+class UsuarioInativoException extends CustomUserMessageAuthenticationException
 {
     public function __construct()
     {
