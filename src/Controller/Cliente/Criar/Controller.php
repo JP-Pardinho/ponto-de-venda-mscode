@@ -23,7 +23,10 @@ class Controller extends AbstractController
     {
         $cliente = new Cliente();
 
-        $form = $this->createForm(ClienteType::class, $cliente);
+        $form = $this->createForm(ClienteType::class, $cliente, [
+            'is_edit' => false,
+        ]);
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

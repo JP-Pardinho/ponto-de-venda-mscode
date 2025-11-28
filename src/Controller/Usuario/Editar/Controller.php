@@ -20,6 +20,14 @@ final class Controller extends AbstractController
     #[Route('/usuarios/editar/{usuario}', name: 'editar_usuario', methods:['GET', 'POST'])]
     public function editar(Usuario $usuario, Request $request): Response
     {
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('danger', 'Acesso negado. Área restrita a administradores.');
+            return $this->render('erro/erro.html.twig', [
+                'erro' => '401'
+            ]);
+        }
+
         $form = $this->createForm(UsuarioType::class, $usuario, [
             'is_edit' => true,
         ]);

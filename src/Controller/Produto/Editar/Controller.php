@@ -21,7 +21,10 @@ final class Controller extends AbstractController
     #[Route('/produtos/{produto}/editar}', name: 'editar_produto', methods:['GET', 'POST'])]
     public function editar(Produto $produto, Request $request): Response
     {
-        $form = $this->createForm(ProdutoType::class, $produto);
+        $form = $this->createForm(ProdutoType::class, $produto, [
+            'is_edit' => true,
+        ]);
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

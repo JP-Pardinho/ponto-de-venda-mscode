@@ -21,7 +21,9 @@ final class Controller extends AbstractController
     public function salvar(Request $request): Response
     {
         $produto = new Produto();
-        $form = $this->createForm(ProdutoType::class, $produto);
+        $form = $this->createForm(ProdutoType::class, $produto, [
+            'is_edit' => false,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

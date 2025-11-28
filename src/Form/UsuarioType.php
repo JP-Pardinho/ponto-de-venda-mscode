@@ -21,17 +21,17 @@ class UsuarioType extends AbstractType
 
         $builder
             ->add('nome', null, [
-                'label' => 'Nome:  <span class="text-danger">*</span>',
+                'label' => 'Nome' . ($isEdit ? ':' : ': <span class="text-danger">*</span>'),
                 'label_html' => true,
             ])
 
             ->add('email', null, [
-                'label' => 'Email: <span class="text-danger">*</span>', 
+                'label' => 'Email' . ($isEdit ? ':' : ': <span class="text-danger">*</span>'), 
                 'label_html' => true,
             ])
 
             ->add('roles', ChoiceType::class, [
-                'label' => 'Cargo: <span class="text-danger">*</span>',
+                'label' => 'Cargo' . ($isEdit ? ':' : ': <span class="text-danger">*</span>'),
                 'label_html' => true,
                 'choices' => [
                     'Administrador' => 'ROLE_ADMIN',
@@ -77,16 +77,21 @@ class UsuarioType extends AbstractType
             
             'invalid_message' => 'Os campos de senha devem ser iguais.',
             'first_options'  => [
-                'label' => 'Senha' . ($isEdit ? ':' : ': <span class="text-danger">*</span>'), 'label_html' => true, 'attr' => ['class' => 'form-control', 
-                'autocomplete' => 'new-password'
-            ]],
+                'label' => 'Senha' . ($isEdit ? ':' : ': <span class="text-danger">*</span>'),
+                'label_html' => true,
+                'attr' => [
+                    'class' => 'form-control', 
+                    'autocomplete' => 'new-password'
+                ]
+            ],
             'second_options' => [
                 'label' => 'Confirme a Senha' . ($isEdit ? ':' : ': <span class="text-danger">*</span>'),
                 'label_html' => true,
                 'attr' => [
                     'class' => 'form-control',
                     'autocomplete' => 'new-password'
-                ]],
+                ]
+            ],
 
             'constraints' => $passwordConstraints,
         ]);

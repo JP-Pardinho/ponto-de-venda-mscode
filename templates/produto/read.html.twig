@@ -24,6 +24,20 @@
                             <i class="bi bi-plus"></i> Novo produto
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black active" 
+                           href="#">
+                            <i class="bi bi-eye"></i> Vizualizar
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black" 
+                           href="{{ path('editar_produto', {produto: produto.id}) }}">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                    </li>
                 </ul>
 
                 <div class="w-100 mt-4">
@@ -61,7 +75,7 @@
                             </div>
                         </div>
                         
-                        <a href="{{ path('listar_produtos') }}" class="btn btn-primary mt-3 w-100">Voltar</a>
+                        <a href="{{ path('listar_produtos') }}" class="btn btn-secondary mt-3 w-100">Voltar</a>
                     </form>
                 </div>
             </div>
