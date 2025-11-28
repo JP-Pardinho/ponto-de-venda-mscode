@@ -25,14 +25,14 @@
                     </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <i class="bi bi-pencil"></i> Editar
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
                         <a class="nav-link text-black" href="{{ path('ver_usuario', {id: usuario.id}) }}">
                             <i class="bi bi-eye"></i> Vizualizar
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="bi bi-pencil"></i> Editar
                         </a>
                     </li>
                 </ul>
@@ -55,22 +55,14 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            {{ form_row(form.plainPassword.first) }}
-                        </div>
-                        <div class="col-md-6">
-                            {{ form_row(form.plainPassword.second) }}
-                        </div>
-                    </div>
+                    {{ form_row(form.plainPassword.first) }}
+                    {{ form_row(form.plainPassword.second) }}
 
                     <div class="row mt-2">
                         <div class="col-12">
                             {{ form_row(form.roles) }}
                         </div>
                     </div>
-
-                    <hr class="my-4">
 
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">

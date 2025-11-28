@@ -17,26 +17,30 @@
 
                 <ul class="nav nav-tabs mb-3">
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="{{ path('listar_usuarios') }}">
+                        <a class="nav-link text-black" 
+                           href="{{ path('listar_usuarios') }}">
                             <i class="bi bi-list-ul"></i> Listar usuários
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="{{ path('salvar_usuario') }}">
+                        <a class="nav-link text-black" 
+                           href="{{ path('salvar_usuario') }}">
                             <i class="bi bi-plus"></i> Novo usuário
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="{{ path('editar_usuario', {usuario: usuario.id}) }}">
-                            <i class="bi bi-pencil"></i> Editar
+                        <a class="nav-link text-black active" 
+                           href="{{ path('ver_usuario', {id: usuario.id}) }}">
+                            <i class="bi bi-eye"></i> Vizualizar
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black active" href="{{ path('ver_usuario', {id: usuario.id}) }}">
-                            <i class="bi bi-eye"></i> Vizualizar
+                        <a class="nav-link text-black" 
+                           href="{{ path('editar_usuario', {usuario: usuario.id}) }}">
+                            <i class="bi bi-pencil"></i> Editar
                         </a>
                     </li>
                 </ul>

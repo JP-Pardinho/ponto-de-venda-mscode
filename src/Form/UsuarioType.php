@@ -77,11 +77,11 @@ class UsuarioType extends AbstractType
             
             'invalid_message' => 'Os campos de senha devem ser iguais.',
             'first_options'  => [
-                'label' => 'Senha' . ($isEdit ? '' : ': <span class="text-danger">*</span>'), 'label_html' => true, 'attr' => ['class' => 'form-control', 
+                'label' => 'Senha' . ($isEdit ? ':' : ': <span class="text-danger">*</span>'), 'label_html' => true, 'attr' => ['class' => 'form-control', 
                 'autocomplete' => 'new-password'
             ]],
             'second_options' => [
-                'label' => 'Confirme a Senha' . ($isEdit ? '' : ': <span class="text-danger">*</span>'),
+                'label' => 'Confirme a Senha' . ($isEdit ? ':' : ': <span class="text-danger">*</span>'),
                 'label_html' => true,
                 'attr' => [
                     'class' => 'form-control',
