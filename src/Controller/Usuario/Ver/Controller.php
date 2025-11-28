@@ -14,7 +14,10 @@ final class Controller extends AbstractController
     #[Route('/usuarios/{id}', name: self::ROUTE_NAME, methods:'GET')]
     public function read(Usuario $usuario): Response
     {
-        if (!$this->isGranted('ROLE_ADMIN')) {
+        /** @var Usuario $usuarioLogado */
+        $usuarioLogado = $this->getUser();
+
+        if (!$this->isGranted('ROLE_ADMIN') && $usuarioLogado->getId() !== $usuario->getId()) {
             $this->addFlash('danger', 'Acesso negado. Área restrita a administradores.');
             return $this->render('erro/erro.html.twig', [
                 'erro' => '401'

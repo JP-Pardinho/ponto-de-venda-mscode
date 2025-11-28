@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}PDV - Cadastrar Produto{% endblock %}
+{% block title %}PDV - Vizualizar usuário{% endblock %}
 
 {% block body %}
 
@@ -11,7 +11,7 @@
                 <div class="mb-4 d-flex flex-row justify-content-between">
                     <h1>
                         <i class="bi bi-person-circle"></i>  
-                        Usuario - #{{ usuario.id }}
+                        Usuário - #{{ usuario.id }}
                     </h1>
                 </div>
 
@@ -32,7 +32,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link text-black active" 
-                           href="{{ path('ver_usuario', {id: usuario.id}) }}">
+                           href="#">
                             <i class="bi bi-eye"></i> Vizualizar
                         </a>
                     </li>
@@ -64,7 +64,7 @@
                             <input type="text" class="form-control" value="{{ 'ROLE_ADMIN' in usuario.roles ? 'Administrador' : 'Operador' }}" aria-label="Categoria" disabled readonly>
                         </div>
                         
-                        <a href="javascript:history.back()" class="btn btn-primary mt-3 w-100">Voltar</a>
+                        <a href="javascript:history.back()" class="btn btn-secondary mt-3 w-100">Voltar</a>
                     </form>
                 </div>
             </div>
