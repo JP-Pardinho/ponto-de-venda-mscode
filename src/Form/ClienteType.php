@@ -14,16 +14,20 @@
     {
         public function buildForm(FormBuilderInterface $builder, array $options): void
         {
+            $isEdit = $options['is_edit'];
+            
             $builder
                 ->add('nome', TextType::class, [
-                    'label' => 'Nome Completo',
+                    'label' => 'Nome Completo' . ($isEdit ? ':' : ': <span class="text-danger">*</span>'),
+                    'label_html' => true,
                     'attr' => [
                         'pattern' => '[A-Za-zÀ-ú ]+',
                         'title' => 'Somente letras e espaços',
                     ]
                 ])
                 ->add('cpf', TextType::class, [
-                    'label' => 'CPF',
+                    'label' => 'CPF' . ($isEdit ? ':' : ': <span class="text-danger">*</span>'),
+                    'label_html' => true,
                     'attr' => [
                         'maxlength' => 11,
                         'pattern' => '\d*',
@@ -32,11 +36,11 @@
                     ],
                 ])
                 ->add('email', EmailType::class, [
-                    'label' => 'E-mail',
+                    'label' => 'E-mail:',
                     'required' => false,
                 ])
                 ->add('telefone', TextType::class, [
-                    'label' => 'Telefone',
+                    'label' => 'Telefone:',
                     'required' => false,
                     'attr' => [
                         'pattern' => '\d*',
@@ -52,6 +56,9 @@
         {
             $resolver->setDefaults([
                 'data_class' => Cliente::class,
+                'is_edit' => false,
             ]);
+
+            $resolver->setAllowedTypes('is_edit', 'bool');
         }
     }

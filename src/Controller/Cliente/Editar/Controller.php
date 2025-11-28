@@ -27,7 +27,9 @@ class Controller extends AbstractController
             return $this->redirectToRoute('clientes_index');
         }
 
-        $form = $this->createForm(ClienteType::class, $cliente);
+        $form = $this->createForm(ClienteType::class, $cliente, [
+            'is_edit' => true,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
