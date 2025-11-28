@@ -45,7 +45,6 @@
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
                             <th scope="col">Nome</th>
                             <th scope="col">CPF</th>
                             <th scope="col">Telefone</th>
@@ -57,7 +56,6 @@
                     <tbody>
                         {% for cliente in clientes %}
                             <tr class="align-middle">
-                                <th scope="row">{{ cliente.id }}</th>
                                 <td>{{ cliente.nome }}</td>
                                 <td>{{ cliente.cpf }}</td>
                                 <td>{{ cliente.telefone }}</td>

@@ -35,7 +35,7 @@ class ClienteRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function buscarPorNomeOuCpf(string $busca): array
+        public function buscarPorNomeOuCpf(string $busca): array
     {
         $busca = trim($busca);
 
@@ -44,14 +44,17 @@ class ClienteRepository extends ServiceEntityRepository
         }
 
         $cpf = preg_replace('/\D/', '', $busca);
+        
+        $qb = $this->createQueryBuilder('c')
+            ->where('c.nome LIKE :termoGeral')
+            ->setParameter('termoGeral', '%' . $busca . '%')
+            ->orderBy('c.nome', 'ASC');
 
-        return $this->createQueryBuilder('c')
-            ->where('c.nome LIKE :nome')
-            ->orWhere('c.cpf LIKE :cpf')
-            ->setParameter('nome', '%' . $busca . '%')
-            ->setParameter('cpf', '%' . $cpf . '%')
-            ->orderBy('c.nome', 'ASC')
-            ->getQuery()
-            ->getResult();
+        if (!empty($cpf)) {
+            $qb->orWhere('c.cpf LIKE :termoCpf')
+            ->setParameter('termoCpf', '%' . $cpf . '%');
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }
