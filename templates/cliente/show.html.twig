@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PDV - Detalhes do Cliente{% endblock %}
+
+{% block body %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="container py-5">
+                <div class="mb-4 d-flex flex-row justify-content-between">
+                    <h1>
+                        <i class="bi bi-person-badge-fill"></i>
+                        Cliente: {{ cliente.nome }}
+                    </h1>
+                </div>
+
+                <ul class="nav nav-tabs mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="{{ path('clientes_index') }}">
+                            <i class="bi bi-list-ul"></i> Listar clientes
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="{{ path('clientes_novo') }}">
+                            <i class="bi bi-plus"></i> Novo cliente
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="w-100 mt-4">
+                    {% include 'partials/error-mensage.html.twig' %}
+
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Nome:</label>
+                            <input type="text"
+                                   class="form-control"
+                                   value="{{ cliente.nome }}"
+                                   disabled readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">CPF:</label>
+                            <input type="text"
+                                   class="form-control"
+                                   value="{{ cliente.cpf }}"
+                                   disabled readonly>
+                        </div>
+
+                        <div class="row">
+                            <div class="mb-3 col-6">
+                                <label class="form-label">Telefone:</label>
+                                <input type="text"
+                                       class="form-control"
+                                       value="{{ cliente.telefone }}"
+                                       disabled readonly>
+                            </div>
+
+                            <div class="mb-3 col-6">
+                                <label class="form-label">Email:</label>
+                                <input type="text"
+                                       class="form-control"
+                                       value="{{ cliente.email }}"
+                                       disabled readonly>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Status:</label><br>
+                            {% if cliente.isAtivo %}
+                                <span class="badge bg-success">Ativo</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Inativo</span>
+                            {% endif %}
+                        </div>
+
+                        <a href="{{ path('clientes_index') }}" class="btn btn-secondary mt-3 w-100">
+                            Voltar
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

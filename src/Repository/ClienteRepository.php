@@ -6,9 +6,6 @@ use App\Entity\Cliente;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Cliente>
- */
 class ClienteRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -16,28 +13,48 @@ class ClienteRepository extends ServiceEntityRepository
         parent::__construct($registry, Cliente::class);
     }
 
-    //    /**
-    //     * @return Cliente[] Returns an array of Cliente objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function salvar(Cliente $cliente): void
+    {
+        $em = $this->getEntityManager();
+        $em->persist($cliente);
+        $em->flush();
+    }
 
-    //    public function findOneBySomeField($value): ?Cliente
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function remover(Cliente $cliente): void
+    {
+        $em = $this->getEntityManager();
+        $em->remove($cliente);
+        $em->flush();
+    }
+
+    public function findAllOrdenadoPorNome(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.nome', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+        public function buscarPorNomeOuCpf(string $busca): array
+    {
+        $busca = trim($busca);
+
+        if ($busca === '') {
+            return $this->findAllOrdenadoPorNome();
+        }
+
+        $cpf = preg_replace('/\D/', '', $busca);
+        
+        $qb = $this->createQueryBuilder('c')
+            ->where('c.nome LIKE :termoGeral')
+            ->setParameter('termoGeral', '%' . $busca . '%')
+            ->orderBy('c.nome', 'ASC');
+
+        if (!empty($cpf)) {
+            $qb->orWhere('c.cpf LIKE :termoCpf')
+            ->setParameter('termoCpf', '%' . $cpf . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }
