@@ -27,33 +27,24 @@ class ClienteRepository extends ServiceEntityRepository
         $em->flush();
     }
 
-    public function findAllOrdenadoPorNome(): array
-    {
-        return $this->createQueryBuilder('c')
-            ->orderBy('c.nome', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
         public function buscarPorNomeOuCpf(string $busca): array
     {
         $busca = trim($busca);
 
-        if ($busca === '') {
-            return $this->findAllOrdenadoPorNome();
-        }
-
-        $cpf = preg_replace('/\D/', '', $busca);
-        
         $qb = $this->createQueryBuilder('c')
-            ->where('c.nome LIKE :termoGeral')
-            ->setParameter('termoGeral', '%' . $busca . '%')
-            ->orderBy('c.nome', 'ASC');
+              ->orderBy('c.nome', 'ASC');
 
-        if (!empty($cpf)) {
-            $qb->orWhere('c.cpf LIKE :termoCpf')
-            ->setParameter('termoCpf', '%' . $cpf . '%');
-        }
+        if ($busca !== '') {
+            $cpf = preg_replace('/\D/', '', $busca);
+
+            $qb->where('c.nome LIKE :termoGeral')
+               ->setParameter('termoGeral', '%' . $busca . '%');
+
+            if (!empty($cpf)) {
+                $qb->orWhere('c.cpf LIKE :termoCpf')
+                   ->setParameter('termoCpf', '%' . $cpf . '%');        
+            }
+      }
 
         return $qb->getQuery()->getResult();
     }
