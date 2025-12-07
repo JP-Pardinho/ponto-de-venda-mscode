@@ -28,4 +28,18 @@ class CategoriaRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    public function buscarPorNome(string $busca): array
+    {
+        $busca = trim($busca);  
+        
+        $qb = $this->createQueryBuilder('c')
+            ->orderBy('c.id', 'ASC');
+
+        if ($busca !== ''){
+            $qb->where('c.nome LIKE :termoGeral')
+               ->setParameter('termoGeral', '%' . $busca . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

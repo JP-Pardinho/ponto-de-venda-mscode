@@ -18,13 +18,9 @@ class Controller extends AbstractController
     #[Route('/clientes', name: 'clientes_index', methods: ['GET'])]
     public function index(Request $request): Response
     {
-        $q = trim((string) $request->query->get('q', ''));
+        $q = $request->query->get('q', '');
 
-        if ($q !== '') {
             $clientes = $this->clienteRepository->buscarPorNomeOuCpf($q);
-        } else {
-            $clientes = $this->clienteRepository->findAllOrdenadoPorNome();
-        }
 
         return $this->render('cliente/index.html.twig', [
             'clientes' => $clientes,
