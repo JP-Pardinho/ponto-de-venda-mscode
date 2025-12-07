@@ -109,11 +109,11 @@
                                             </button>
                                         </form>
                                     {% else %}
-                                        <form action="{{ path('reativar_usuario', {usuario: usuario.id}) }}"
-                                              method="POST">
+                                        <form action="{{ path('reativar_usuario', {usuario: usuario.id}) }}" method="POST">
                                             <button type="submit" class="btn btn-success btn-sm" title="Reativar">
                                                 <i class="bi bi-arrow-counterclockwise"></i>
                                             </button>
+                                        </form>
                                     {% endif %}   
                                     </div>
                                 </div>

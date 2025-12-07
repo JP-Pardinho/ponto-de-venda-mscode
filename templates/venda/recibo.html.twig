@@ -1,0 +1,229 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Venda Concluída - #{{ venda.id }}
+{% endblock %}
+
+{% block body %}
+	<div class="row mt-3">
+		<div class="col-12">
+			<div class="card shadow-sm">
+				<div class="container py-3">
+
+                    {% if venda.status == 1 %}
+                        <div class="mb-3 text-center">
+                            <div class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                            </div>
+                            <h3 class="text-success mb-1">Venda Concluída com Sucesso!</h3>
+                            <p class="text-muted">Venda #{{ venda.id }}
+                                -
+                                {{ venda.dataVenda|date('d/m/Y H:i') }}</p>
+                        </div>
+                    {% else %}
+                        <div class="mb-3 text-center">
+                            <div class="mb-3">
+                                <i class="bi bi-x-circle text-danger" style="font-size: 4rem;"></i>
+                            </div>
+                            <h3 class="text-danger mb-1">Venda Cancelada!</h3>
+                            <p class="text-muted">Venda #{{ venda.id }}
+                        </div>    
+                    {% endif %}
+
+					<hr>
+
+					<div class="row justify-content-center">
+						<div class="col-lg-8">
+
+							<div class="card bg-light mb-3">
+								<div class="card-body p-3">
+									<h6 class="card-title mb-3">
+										<i class="bi bi-person"></i>
+										Informações do Cliente
+									</h6>
+									<div class="row">
+										<div class="col-md-6">
+											<small class="text-muted d-block">Nome:</small>
+											<strong>{{ venda.cliente.nome|default('Consumidor Final') }}</strong>
+										</div>
+										<div class="col-md-6">
+											<small class="text-muted d-block">CPF/CNPJ:</small>
+											<strong>{{ venda.cliente.cpf|default('Não informado') }}</strong>
+										</div>
+									</div>
+
+									<div class="border-top mt-2 pt-2">
+										<small class="text-muted d-block mb-1">Modalidade:</small>
+
+										{% if venda.tipoEntrega == constant('App\\Entity\\Venda::TIPO_ENTREGA') %}
+
+											<span class="badge bg-primary mb-2">
+												<i class="bi bi-truck"></i>
+												Entrega em Domicílio
+											</span>
+
+											<div class="p-2 bg-white border rounded">
+												<small class="text-muted d-block">Endereço de Entrega:</small>
+												<span class="fw-bold text-dark">
+													{{ venda.enderecoEntrega|nl2br }}
+												</span>
+											</div>
+
+										{% else %}
+
+											<span class="badge bg-success">
+												<i class="bi bi-shop"></i>
+												Retirada na Loja (Balcão)
+											</span>
+
+										{% endif %}
+									</div>
+								</div>
+							</div>
+
+							<div class="card mb-3">
+								<div class="card-body p-3">
+									<h6 class="card-title mb-3">
+										<i class="bi bi-cash-stack"></i>
+										Resumo Financeiro
+									</h6>
+
+									<table class="table table-sm table-borderless mb-0">
+										<tr>
+											<td>Subtotal:</td>
+											<td class="text-end">
+												<strong>R$
+													{{ venda.valorTotal|number_format(2, ',', '.') }}</strong>
+											</td>
+										</tr>
+										<tr class="text-danger">
+											<td>Desconto:</td>
+											<td class="text-end">
+												<strong>- R$
+													{{ venda.valorDesconto|default(0)|number_format(2, ',', '.') }}</strong>
+											</td>
+										</tr>
+										<tr class="border-top">
+											<td>
+												<strong>Total Pago:</strong>
+											</td>
+											<td class="text-end">
+												<strong class="{{ venda.status == 2 ? 'text-danger' : 'text-success' }} fs-5">
+													R$
+													{{ (venda.valorTotal - venda.valorDesconto)|number_format(2, ',', '.') }}
+												</strong>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+
+							<div class="card mb-3">
+								<div class="card-body p-3">
+									<h6 class="card-title mb-3">
+										<i class="bi bi-cart-check"></i>
+										Itens Vendidos
+									</h6>
+
+									<table class="table table-sm table-hover mb-0">
+										<thead class="table-light">
+											<tr>
+												<th>Produto</th>
+												<th class="text-center" style="width: 80px;">Qtd.</th>
+												<th class="text-end" style="width: 120px;">Valor Unit.</th>
+												<th class="text-end" style="width: 120px;">Subtotal</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for item in venda.vendaItems %}
+												<tr>
+													<td>{{ item.produto.nome }}</td>
+													<td class="text-center">{{ item.quantidade }}</td>
+													<td class="text-end">R$
+														{{ item.valorAtualProduto|number_format(2, ',', '.') }}</td>
+													<td class="text-end">
+														<strong>R$
+															{{ (item.valorAtualProduto * item.quantidade)|number_format(2, ',', '.') }}</strong>
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<div class="card mb-3">
+								<div class="card-body p-3">
+									<h6 class="card-title mb-3">
+										<i class="bi bi-wallet2"></i>
+										Formas de Pagamento
+									</h6>
+
+									<table class="table table-sm table-borderless mb-0">
+										<tbody>
+											{% for pagamento in venda.pagamentos %}
+												<tr>
+													<td>{{ pagamento.tipoPagamento }}</td>
+													<td class="text-end">
+                                                        {{ pagamento.tipoPagamento == 'CREDITO' ? pagamento.parcelas ~ 'x' }}
+                                                        R$
+														{{ pagamento.valor|number_format(2, ',', '.') }}</td>
+												</tr>
+											{% endfor %}
+
+											{% if venda.troco > 0 %}
+												<tr class="border-top">
+													<td>
+														<strong>Troco:</strong>
+													</td>
+													<td class="text-end">
+														<strong>{{ venda.troco|number_format(2, ',', '.') }}</strong>
+													</td>
+												</tr>
+											{% endif %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<hr>
+
+							<div class="d-flex gap-2 justify-content-center mb-3">
+								<button class="btn btn-outline-primary" onclick="window.print()">
+									<i class="bi bi-printer"></i>
+									Imprimir Recibo
+								</button>
+
+								<a href="{{ path('pdv_novaVenda') }}" class="btn btn-success">
+									<i class="bi bi-plus-circle"></i>
+									Nova Venda
+								</a>
+
+								<a href="/" class="btn btn-outline-secondary">
+									<i class="bi bi-house"></i>
+									Início
+								</a>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<style>
+		@media print {
+			.btn,
+			.sidebar,
+			nav,
+			footer {
+				display: none !important;
+			}
+			.card {
+				box-shadow: none !important;
+				border: 1px solid #ddd !important;
+			}
+		}
+	</style>
+{% endblock %}

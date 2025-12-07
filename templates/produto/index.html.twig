@@ -74,27 +74,39 @@
 									<td class="col-1">
 										<div class="d-flex flex-column gap-2">
 											<div class="d-flex gap-1">
+												{% set inativo = '' %}
+												{% if not produto.isAtivo %}
+													{% set inativo = 'disabled' %}
+												{% endif %}
 
-												<a type="button" class="btn btn-primary btn-sm flex-fill" title="Vizualizar" href="{{ path('ver_produto', {produto: produto.id}) }}">
+												<a type="button" class="btn btn-primary btn-sm flex-fill {{ inativo }}" title="Vizualizar" href="{{ path('ver_produto', {produto: produto.id}) }}">
 													<i class="bi bi-eye"></i>
 												</a>
 
-												<a type="button" class="btn btn-secondary btn-sm flex-fill" title="Editar" href="{{ path('editar_produto', {produto: produto.id}) }}">
+												<a type="button" class="btn btn-secondary btn-sm flex-fill {{ inativo }}" title="Editar" href="{{ path('editar_produto', {produto: produto.id}) }}">
 													<i class="bi bi-pencil"></i>
 												</a>
 
-												{% if not produto.vendaItems.isEmpty() %}
-													{% set message = 'Você tem certeza que deseja inativar este produto? (Produto vinculado a uma ou mais vendas)' %}
-												{% else %}
-													{% set message = 'Confirme a EXCLUSÃO permanente deste produto. (Esta ação não pode ser desfeita)' %}
-												{% endif %}
+												{% if produto.isAtivo %}
+													{% if not produto.vendaItems.isEmpty() %}
+														{% set message = 'Você tem certeza que deseja inativar este produto? (Produto vinculado a uma ou mais vendas)' %}
+													{% else %}
+														{% set message = 'Confirme a EXCLUSÃO permanente deste produto. (Esta ação não pode ser desfeita)' %}
+													{% endif %}
 
-												<form action="{{ path('remover_produto', {produto: produto.id}) }}" method="POST" class="flex-fill">
-													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ produto.id) }}">
-													<button type="submit" class="btn btn-danger btn-sm w-100" title="Excluir" onclick="return confirm('{{ message }}')">
-														<i class="bi bi-x-lg"></i>
-													</button>
-												</form>
+													<form action="{{ path('remover_produto', {produto: produto.id}) }}" method="POST" class="flex-fill">
+														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ produto.id) }}">
+														<button type="submit" class="btn btn-danger btn-sm w-100" title="Excluir" onclick="return confirm('{{ message }}')">
+															<i class="bi bi-x-lg"></i>
+														</button>
+													</form>
+												{% else %}
+													<form action="{{ path('reativar_produto', {produto: produto.id}) }}" method="POST">
+														<button type="submit" class="btn btn-success btn-sm" title="Reativar">
+															<i class="bi bi-arrow-counterclockwise"></i>
+														</button>
+													</form>
+												{% endif %}
 											</div>
 										</div>
 									</td>

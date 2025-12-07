@@ -32,6 +32,11 @@ final class Controller extends AbstractController
             return $this->redirectToRoute('salvar_categoria_show');
         }
 
+        if (strlen($nomeCategoria) == 0) {
+            $this->addFlash('danger', 'O nome da categoria não pode ser vazio!');
+            return $this->redirectToRoute('salvar_categoria_show');
+        }
+
         $categoriaExistente = $this->categoriaRepository->findOneBy(['nome' => $nomeCategoria]);
         if ($categoriaExistente) {
             $this->addFlash('danger', 'Já existe uma categoria cadastrada com esse nome!');

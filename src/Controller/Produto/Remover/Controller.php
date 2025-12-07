@@ -22,7 +22,7 @@ final class Controller extends AbstractController
     {    
         try {
             $this->produtoService->removerOuInativar($produto);
-            $this->addFlash('success', 'Produto excluído.');
+            $this->addFlash('success', 'Produto deletado ou inativado.');
         } catch (Throwable $e) {
             $this->addFlash('danger', $e->getMessage());
         }

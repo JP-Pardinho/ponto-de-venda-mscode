@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dados de Entrega - Venda #{{ venda.id }}
+{% endblock %}
+
+{% block body %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="container py-3">
+                <div class="mb-4 d-flex flex-row justify-content-between align-items-center">
+                    <h1>
+                        <i class="bi bi-person-badge"></i>
+                        Identificação do Cliente
+                    </h1>
+                    <span class="badge bg-secondary">Venda #{{ venda.id }}</span>
+                </div>
+
+                <ul class="nav nav-tabs mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">
+                            <i class="bi bi-cart"></i>
+                            Itens
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="bi bi-person"></i>
+                            Cliente e Entrega
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" aria-disabled="true">
+                            <i class="bi bi-cash"></i>
+                            Pagamento
+                        </a>
+                    </li>
+                </ul>
+
+                {% include '/partials/error-mensage.html.twig' %}
+
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="alert alert-light border mb-4">
+                            <div class="row align-items-center">
+                                <div class="col-6">
+                                    <strong>Total da Venda:</strong>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <span class="text-success fs-4">
+                                        R$
+                                        {{ (venda.valorTotal - venda.valorDesconto)|number_format(2, ',', '.') }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{ form_start(form) }}
+                        <div class="mb-4">
+                            {{ form_row(form.cliente) }}
+                            <div class="form-text">
+                                Para cadastrar um novo cliente
+                                <a href="{{ path('clientes_novo') }}" target="_blank">
+                                    clique aqui.
+                                </a>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="mb-3">
+                            {{ form_row(form.tipoEntrega) }}
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form_row(form.enderecoEntrega) }}
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a href="{{ path('pdv_pdv', {id: venda.id}) }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i>
+                                Voltar
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                Avançar para Pagamento
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

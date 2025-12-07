@@ -18,6 +18,13 @@ final class Controller extends AbstractController
     #[Route('/usuarios/remover/{usuario}', name: 'remover_usuario')]
     public function remover(Usuario $usuario): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('danger', 'Acesso negado. Área restrita a administradores.');
+            return $this->render('erro/erro.html.twig', [
+                'erro' => Response::HTTP_FORBIDDEN
+            ]);
+        }
+
         $this->usuarioService->inativar($usuario);
         $this->addFlash('success', 'Usuário removido com sucesso!');
 

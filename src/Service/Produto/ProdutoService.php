@@ -25,21 +25,20 @@ class ProdutoService
         $this->produtoRepository->salvar($produto);
     }
 
-    public function editar(Produto $produto): void
-    {
-        $this->entityManager->flush();
-    }
-
     public function removerOuInativar(Produto $produto): void 
     {
         if (!$produto->getVendaItems()->isEmpty()) {
             $produto->setAtivo(false);
-            $this->entityManager->flush();
-            
-            throw new ProdutoJaVendidoException();      
+            $this->produtoRepository->flush();
+            return;
         }
 
         $this->produtoRepository->remover($produto);
+    }
+
+    public function editar(Produto $produto): void
+    {
+        $this->produtoRepository->flush();
     }
 
     public function editarQuantidade(Produto $produto, int $quantidade): void
@@ -52,6 +51,12 @@ class ProdutoService
         $novoEstoque = $produto->getQuantidadeEstoque() + $quantidade;
         $produto->setQuantidadeEstoque($novoEstoque);
 
+        $this->produtoRepository->salvar($produto);
+    }
+
+    public function reativar(Produto $produto): void
+    {
+        $produto->setAtivo(true);
         $this->produtoRepository->salvar($produto);
     }
 }

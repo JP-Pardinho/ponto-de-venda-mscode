@@ -44,4 +44,9 @@ class ProdutoRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
 }
