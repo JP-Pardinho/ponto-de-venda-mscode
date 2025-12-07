@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PDV - Vendas{% endblock %}
+
+{% block body %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="container py-5">
+                <div class="mb-4 d-flex flex-row justify-content-between">
+                    <h1><i class="bi bi-currency-dollar"></i> Vendas</h1>
+                </div>
+                
+                <ul class="nav nav-tabs mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="bi bi-list-ul"></i> Listar vendas
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="{{ path('pdv_novaVenda') }}">
+                            <i class="bi bi-plus"></i> Nova venda 
+                        </a>
+                    </li>
+                </ul>
+                
+                {% include '/partials/error-mensage.html.twig' %}
+
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Vendedor</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Data da Venda</th>
+                            <th scope="col">Valor Total</th>
+                            <th scope="col">Valor Desconto</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Tipo de entrega</th>
+                            <th scope="col" class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for venda in vendas %}
+                        <tr class="align-middle">
+                            <th scope="row">{{ venda.id }}</th>
+                            
+                            <td>{{ venda.usuario.nome }}</td>
+                            <td>{{ venda.cliente ? venda.cliente.nome : 'Cliente sem cadastro' }}</td>
+                            <td>{{ venda.dataVenda|date('d/m/Y') }}</td>
+                            <td>R$ {{ venda.valorTotal|number_format(2, ',', '.') }}</td>
+                            <td>R$ {{ venda.valorDesconto|number_format(2, ',', '.') }}</td>
+                            
+                            <td>
+                                {% set cor_badge = 'bg-secondary' %}
+                                
+                                {% if venda.status == '1' %}
+                                    {% set cor_badge = 'bg-success' %}
+                                {% elseif venda.status == '2' %}
+                                    {% set cor_badge = 'bg-danger' %}
+                                {% elseif venda.status == '0' %}
+                                    {% set cor_badge = 'bg-warning text-dark' %}
+                                {% endif %}
+
+                                <span class="badge {{ cor_badge }}">
+                                    {{ venda.StatusTexto }}
+                                </span>
+                            </td>
+
+                            <td>{{ venda.tipoEntrega }}</td>
+
+                            <td class="col-1">
+                                <div class="d-flex flex-column gap-2">
+                                    <div class="d-flex gap-1">
+
+                                        <a type="button"
+                                           class="btn btn-primary btn-sm flex-fill"
+                                           title="Vizualizar"
+                                           href="{{ path('venda_recibo', {id: venda.id}) }}"
+                                        >
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        
+                                        {% if venda.status != 'Cancelada' %}
+                                            {% set message = 'Você tem certeza que deseja cancelar esta venda?' %}
+
+                                            <form action="{{ path('cancelar_venda', {id: venda.id}) }}" 
+                                                  method="POST" 
+                                                  class="flex-fill">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ venda.id) }}">
+                                                <button type="submit"
+                                                        class="btn btn-danger btn-sm w-100"
+                                                        title="Cancelar"
+                                                        onclick="return confirm('{{ message }}')">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr> 
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

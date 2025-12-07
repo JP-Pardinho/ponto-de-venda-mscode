@@ -1,0 +1,171 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PDV - Venda #{{ venda.id }}{% endblock %}
+
+{% block body %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="container py-3">
+                <div class="mb-4 d-flex flex-row justify-content-between align-items-center">
+                    <h1>
+                        <i class="bi bi-cart-plus"></i> Venda #{{ venda.id }}
+                    </h1>
+                    <span class="badge bg-secondary">
+                        Operador: {{ app.user.nome }}
+                    </span>
+                </div>
+
+                <ul class="nav nav-tabs mb-4">
+                    <li class="nav-item active">
+                        <a class="nav-link active" href="#">
+                            <i class="bi bi-cart"></i> Itens
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">
+                            <i class="bi bi-person"></i> Cliente e Entrega
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">
+                            <i class="bi bi-cash"></i> Pagamento
+                        </a>
+                    </li>
+                </ul>
+
+                {% include '/partials/error-mensage.html.twig' %}
+
+                <div class="row">
+                    
+                    <div class="col-md-8">
+                        
+                        {{ form_start(form, {
+                            'action': path('pdv_adicionar_item', {'id': venda.id}),
+                            'attr': {'class': 'row g-3 align-items-end mb-4'} 
+                        }) }}
+                            <div class="col-md-2">
+                                {{ form_row(form.quantidade) }}
+                            </div>
+
+                            <div class="col-md-8">
+                                {{ form_row(form.produto) }}
+                            </div>
+                            
+                            <div class="col-md-2">
+                                {{ form_row(form.adicionar, {'attr': {'class': 'btn btn-primary w-100'}}) }}
+                            </div>
+                        {{ form_end(form) }}
+
+                        <hr>
+
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th class="text-center">Qtd.</th>
+                                    <th class="text-end">Preço Unit.</th>
+                                    <th class="text-end">Subtotal</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in venda.vendaItems %}
+                                <tr class="align-middle">
+                                    <td><strong>{{ item.produto.nome }}</strong></td>
+                                    <td class="text-center">{{ item.quantidade }}</td>
+                                    <td class="text-end">R$ {{ item.valorAtualProduto|number_format(2, ',', '.') }}</td>
+                                    <td class="text-end"><strong>R$ {{ (item.valorAtualProduto * item.quantidade)|number_format(2, ',', '.') }}</strong></td>
+                                    <td class="text-center">
+                                        <a href="{{ path('pdv_remover_item', {idItem: item.id}) }}" 
+                                           class="btn btn-danger btn-sm" 
+                                           title="Remover"
+                                           onclick="return confirm('Deseja remover este item?')">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">
+                                        Nenhum item adicionado ainda.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">Resumo do Pedido</h5>
+
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td>Subtotal:</td>
+                                        <td class="text-end"><strong>R$ {{ venda.valorTotal|number_format(2, ',', '.') }}</strong></td>
+                                    </tr>
+                                    <tr class="text-danger">
+                                        <td>Descontos:</td>
+                                        <td class="text-end"><strong>- R$ {{ venda.valorDesconto|default(0)|number_format(2, ',', '.') }}</strong></td>
+                                    </tr>
+                                </table>
+
+                                <hr>
+
+                                    <form 
+                                        action="{{ path('pdv_aplicar_desconto', {id: venda.id}) }}"
+                                        method="POST" class="mb-4"
+                                    >
+                                    <label class="form-label">Desconto (R$)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">R$</span>
+                                        <input type="number" 
+                                               name="desconto" 
+                                               class="form-control" 
+                                               step="0.01" 
+                                               min="0" 
+                                               placeholder="0,00"
+                                               value="{{ venda.valorDesconto|default(0) }}">
+                                        <button class="btn btn-outline-secondary" type="submit" title="Aplicar">
+                                            <i class="bi bi-check-lg"></i>
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <hr>
+
+                                <div class="text-center mb-4">
+                                    <small class="text-muted text-uppercase">Total a Pagar</small>
+                                    <h2 class="text-success mb-0">
+                                        R$ {{ (venda.valorTotal - venda.valorDesconto|default(0))|number_format(2, ',', '.') }}
+                                    </h2>
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    {% if venda.vendaItems|length > 0 %}
+                                        <a href="{{ path('pdv_dados_entrega', {id: venda.id}) }}" 
+                                        class="btn btn-success btn-lg">
+                                            <i class="bi bi-check-circle"></i> Finalizar Venda
+                                        </a>
+                                    {% else %}
+                                        <button class="btn btn-secondary btn-lg py-3 disabled" disabled>
+                                            <i class="bi bi-cart-x"></i> Carrinho Vazio
+                                        </button>
+                                    {% endif %}
+                                    
+                                    <a href="/" class="btn btn-outline-secondary w-100">
+                                        <i class="bi bi-house"></i> Início
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

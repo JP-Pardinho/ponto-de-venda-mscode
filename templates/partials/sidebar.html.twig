@@ -12,7 +12,9 @@
 
     <ul class="nav nav-pills flex-column">
         <li class="nav-item">
-            <a href="" class="nav-link d-flex align-items-center text-white text-decoration-none">
+            <a href="{{ path('pdv_novaVenda') }}" 
+               class="nav-link d-flex align-items-center text-white text-decoration-none 
+               {{ app.request.pathInfo starts with '/pdv' ? 'active' : '' }}">
                 <i class="bi bi-shop fs-4 me-2"></i>
                 PDV
             </a>
@@ -41,7 +43,8 @@
         </li>
 
         <li class="nav-item">
-            <a href="" class="nav-link d-flex align-items-center text-white text-decoration-none">
+            <a href="{{ path('listar_vendas') }}" class="nav-link d-flex align-items-center text-white text-decoration-none
+            {% if current_path starts with path('listar_vendas') %}active{% endif %}">
                 <i class="bi bi-currency-dollar fs-4 me-2"></i>
                 Vendas
             </a>
@@ -52,19 +55,19 @@
 
     <ul class="nav nav-pills flex-column">
         <li class="nav-item">
-            <a href="{{ path('clientes_index')}}" class="nav-link d-flex align-items-center text-white text-decoration-none">
+            <a href="{{ path('clientes_index')}}" 
+              class="nav-link d-flex align-items-center text-white text-decoration-none
+              {% if current_path starts with path('clientes_index') %}active{% endif %}" 
+              >
                 <i class="bi bi-person-video2 fs-4 me-2"></i>
                 Clientes
             </a>
         </li>
         <li class="nav-item">
-            <a href="" class="nav-link d-flex align-items-center text-white text-decoration-none">
-                <i class="bi bi-cash-coin fs-4 me-2"></i>
-                Financeiro
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ path('listar_usuarios') }}" class="nav-link d-flex align-items-center text-white text-decoration-none">
+            <a href="{{ path('listar_usuarios') }}" 
+               class="nav-link d-flex align-items-center text-white text-decoration-none
+               {% if current_path starts with path('listar_usuarios') %}active{% endif %}"
+               >
                 <i class="bi bi-person-circle fs-4 me-2"></i>
                 Usuários
             </a>
@@ -75,7 +78,9 @@
 
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="{{ path('app_sobre') }}" class="nav-link d-flex align-items-center text-white text-decoration-none">
+            <a href="{{ path('app_sobre') }}" 
+              class="nav-link d-flex align-items-center text-white text-decoration-none
+              {% if current_path starts with path('app_sobre') %}active{% endif %}">
                 <i class="bi bi-info-circle-fill fs-4 me-2"></i>
                 Sobre
             </a>

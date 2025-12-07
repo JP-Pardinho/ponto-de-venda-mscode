@@ -103,7 +103,6 @@
                                                 <i class="bi bi-pencil"></i>
                                             </a>
 
-                                            {# Desativar #}
                                             {% if cliente.isAtivo %}
                                             <form
                                                 action="{{ path('clientes_delete', {id: cliente.id}) }}"
