@@ -6,29 +6,29 @@ body {
 }
 
 .sidebar {
-    width: 280px; 
-    position: fixed; 
+    width: 280px;
+    position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
     padding: 1.5rem 1rem;
     background-color: #0B0909;
     color: #fff;
-    overflow-y: auto; 
+    overflow-y: auto;
 }
 
 .main-content {
-    margin-left: 280px; 
-    width: calc(100% - 280px); 
-    
+    margin-left: 280px;
+    width: calc(100% - 280px);
+
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
-        
+
 .page-content {
-    padding: 2rem; 
-    flex-grow: 1; 
+    padding: 2rem;
+    flex-grow: 1;
 }
 
 .sidebar .title {
@@ -54,12 +54,42 @@ body {
 }
 
 .btn-laranja {
-    background-color: #FE4A49; 
+    background-color: #FE4A49;
     border-color: #FE4A49;
     color: rgb(255, 255, 255);
 }
+
 .btn-laranja:hover {
     background-color: #852525;
     border-color: #852525;
     color: rgb(0, 0, 0);
+}
+
+.flash-auto-hide {
+    animation: flashHide 5s forwards;
+    overflow: hidden;
+}
+
+@keyframes flashHide {
+    0% {
+        opacity: 1;
+        max-height: 200px;
+        margin-bottom: .5rem;
+        padding-top: .75rem;
+        padding-bottom: .75rem;
+    }
+    80% {
+        opacity: 1;
+        max-height: 200px;
+        margin-bottom: .5rem;
+        padding-top: .75rem;
+        padding-bottom: .75rem;
+    }
+    100% {
+        opacity: 0;
+        max-height: 0;
+        margin-bottom: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
 }

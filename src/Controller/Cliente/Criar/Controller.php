@@ -5,6 +5,7 @@ namespace App\Controller\Cliente\Criar;
 use App\Entity\Cliente;
 use App\Form\ClienteType;
 use App\Service\Cliente\ClienteService;
+use App\Exception\Cliente\CpfJaCadastradoException;
 use App\Exception\Cliente\ClienteInvalidDataException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,20 +14,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class Controller extends AbstractController
 {
-    public function __construct(
-        private ClienteService $clienteService
-    ) {
-    }
-
-    #[Route('/clientes/novo', name: 'clientes_novo', methods: ['GET', 'POST'])]
-    public function novo(Request $request): Response
+    public function __construct(private ClienteService $clienteService) {}
+    #[Route('/clientes/novo', name: 'clientes_novo', methods: ['GET', 'POST'])] public function novo(Request $request): Response
     {
         $cliente = new Cliente();
-
-        $form = $this->createForm(ClienteType::class, $cliente, [
-            'is_edit' => false,
-        ]);
-        
+        $form = $this->createForm(ClienteType::class, $cliente);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -34,15 +26,15 @@ class Controller extends AbstractController
                 $this->clienteService->criar($cliente);
                 $this->addFlash('success', 'Cliente cadastrado com sucesso!');
                 return $this->redirectToRoute('clientes_index');
+            } catch (CpfJaCadastradoException $e) {
+                $this->addFlash('danger', 'Já existe um cliente cadastrado com o CPF informado.');
+                return $this->redirectToRoute('clientes_novo');
             } catch (ClienteInvalidDataException $e) {
                 $this->addFlash('danger', $e->getMessage());
             } catch (\Throwable $e) {
                 $this->addFlash('danger', 'Erro ao cadastrar cliente.');
             }
         }
-
-        return $this->render('cliente/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render('cliente/new.html.twig', ['form' => $form->createView(),]);
     }
 }

@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Cliente;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use App\Exception\Cliente\CpfJaCadastradoException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class ClienteRepository extends ServiceEntityRepository
@@ -15,10 +17,15 @@ class ClienteRepository extends ServiceEntityRepository
 
     public function salvar(Cliente $cliente): void
     {
-        $em = $this->getEntityManager();
+         $em = $this->getEntityManager();
+
+    try {
         $em->persist($cliente);
         $em->flush();
+    } catch (UniqueConstraintViolationException $e) {
+        throw new CpfJaCadastradoException();
     }
+}
 
     public function remover(Cliente $cliente): void
     {
@@ -44,7 +51,7 @@ class ClienteRepository extends ServiceEntityRepository
         }
 
         $cpf = preg_replace('/\D/', '', $busca);
-        
+
         $qb = $this->createQueryBuilder('c')
             ->where('c.nome LIKE :termoGeral')
             ->setParameter('termoGeral', '%' . $busca . '%')
