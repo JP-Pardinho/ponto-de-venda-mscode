@@ -4,6 +4,7 @@ namespace App\Controller\Categoria\Listar;
 
 use App\Repository\CategoriaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -15,10 +16,16 @@ final class Controller extends AbstractController
     }
 
     #[Route('/categorias', name: 'listar_categorias', methods:'GET')]
-    public function show(): Response
+    public function show(Request $request): Response
     {
+
+        $q = $request->query->get('q', '');
+
+        $categorias = $this->categoriaRepository->buscarPorNome($q);
+
         return $this->render('categoria/index.html.twig', [
-            'categorias' => $this->categoriaRepository->findAll(),
+            'categorias' => $categorias,
+            'q'          => $q,
         ]);
     }
 }

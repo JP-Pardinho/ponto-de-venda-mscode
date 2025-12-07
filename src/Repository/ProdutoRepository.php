@@ -27,13 +27,21 @@ class ProdutoRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    public function findAllWithCategory(): array
+        public function buscarPorNome(string $busca): array
     {
-        return $this->createQueryBuilder('p')  
-            ->addSelect('c') 
+        $busca = trim($busca);
+        
+        $qb = $this->createQueryBuilder('p')
+            ->addSelect('c')
             ->leftJoin('p.categoria', 'c')
-            ->orderBy('p.nome', 'ASC')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('p.id', 'ASC');
+
+        if ($busca !== '') {    
+            $qb->where('p.nome LIKE :termoGeral')
+               ->orWhere('c.nome LIKE :termoGeral')
+               ->setParameter('termoGeral', '%' . $busca . '%');
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }
