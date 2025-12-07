@@ -11,43 +11,65 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: VendaRepository::class)]
 class Venda
 {
+    public const STATUS_ABERTA = 0;
+    public const STATUS_FINALIZADA = 1;
+    public const STATUS_CANCELADA = 2;
+    
+    public const TIPO_RETIRADA = 'RETIRADA';
+    public const TIPO_ENTREGA = 'ENTREGA';
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'compras')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Cliente $cliente = null;
 
     #[ORM\ManyToOne(inversedBy: 'vendas')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Usuario $usuario = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $dataVenda = null;
 
     #[ORM\Column]
     private ?float $valorTotal = null;
+    
+    #[ORM\Column(nullable: true)]
+    private ?float $valorDesconto = null;
 
-    #[ORM\Column]
-    private ?float $valorPago = null;
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $status = self::STATUS_ABERTA;
 
-    #[ORM\Column(length: 255)]
-    private ?string $formaPagamento = null;
+    #[ORM\Column(length: 20)]
+    private ?string $tipoEntrega = self::TIPO_RETIRADA;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $enderecoEntrega = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $troco = null;
+    private ?float $troco = 0.0;
 
     /**
      * @var Collection<int, VendaItem>
      */
-    #[ORM\OneToMany(targetEntity: VendaItem::class, mappedBy: 'venda')]
+    #[ORM\OneToMany(targetEntity: VendaItem::class, cascade: ['persist'], mappedBy: 'venda')]
     private Collection $vendaItems;
+
+    /**
+     * @var Collection<int, PagamentoVenda>
+     */
+    #[ORM\OneToMany(targetEntity: PagamentoVenda::class, mappedBy: 'venda', cascade: ['persist'], orphanRemoval: true)]
+    private Collection $pagamentos;
 
     public function __construct()
     {
         $this->vendaItems = new ArrayCollection();
+        $this->status = self::STATUS_ABERTA;
+        $this->pagamentos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -103,39 +125,57 @@ class Venda
         return $this;
     }
 
-    public function getValorPago(): ?float
+    public function getValorDesconto(): ?float
     {
-        return $this->valorPago;
+        return $this->valorDesconto;
     }
 
-    public function setValorPago(float $valorPago): static
+    public function setValorDesconto(?float $valorDesconto): static
     {
-        $this->valorPago = $valorPago;
-
+        $this->valorDesconto = $valorDesconto;
         return $this;
     }
 
-    public function getFormaPagamento(): ?string
+    public function getStatus(): ?int
     {
-        return $this->formaPagamento;
+        return $this->status;
     }
 
-    public function setFormaPagamento(string $formaPagamento): static
+    public function StatusTexto(): string
     {
-        $this->formaPagamento = $formaPagamento;
+        return match($this->status) {
+            self::STATUS_ABERTA => 'Venda em Aberto',
+            self::STATUS_FINALIZADA => 'Venda Finalizada',
+            self::STATUS_CANCELADA => 'Venda Cancelada',
+            default => 'Status Desconhecido'
+        };
+    }
 
+    public function setStatus(int $status): static
+    {
+        $this->status = $status;
         return $this;
     }
 
-    public function getTroco(): ?float
+    public function getTipoEntrega(): ?string
     {
-        return $this->troco;
+        return $this->tipoEntrega;
     }
 
-    public function setTroco(?float $troco): static
+    public function setTipoEntrega(string $tipoEntrega): static
     {
-        $this->troco = $troco;
+        $this->tipoEntrega = $tipoEntrega;
+        return $this;
+    }
 
+    public function getEnderecoEntrega(): ?string
+    {
+        return $this->enderecoEntrega;
+    }
+
+    public function setEnderecoEntrega(?string $enderecoEntrega): static
+    {
+        $this->enderecoEntrega = $enderecoEntrega;
         return $this;
     }
 
@@ -166,6 +206,47 @@ class Venda
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PagamentoVenda>
+     */
+    public function getPagamentos(): Collection
+    {
+        return $this->pagamentos;
+    }
+
+    public function addPagamento(PagamentoVenda $pagamento): static
+    {
+        if (!$this->pagamentos->contains($pagamento)) {
+            $this->pagamentos->add($pagamento);
+            $pagamento->setVenda($this);
+        }
+
+        return $this;
+    }
+
+    public function removePagamento(PagamentoVenda $pagamento): static
+    {
+        if ($this->pagamentos->removeElement($pagamento)) {
+            // set the owning side to null (unless already changed)
+            if ($pagamento->getVenda() === $this) {
+                $pagamento->setVenda(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getTroco(): ?float
+    {
+        return $this->troco;
+    }
+
+    public function setTroco(?float $troco): static
+    {
+        $this->troco = $troco;
         return $this;
     }
 }

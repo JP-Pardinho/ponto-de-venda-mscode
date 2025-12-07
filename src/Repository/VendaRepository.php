@@ -16,6 +16,13 @@ class VendaRepository extends ServiceEntityRepository
         parent::__construct($registry, Venda::class);
     }
 
+    public function salvar(Venda $venda): void
+    {
+        $this->getEntityManager()->persist($venda);
+        $this->getEntityManager()->flush();
+    }
+
+
     //    /**
     //     * @return Venda[] Returns an array of Venda objects
     //     */
