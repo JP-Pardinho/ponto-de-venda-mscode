@@ -21,6 +21,14 @@ final class Controller extends AbstractController
     #[Route('/usuarios/salvar', name: 'salvar_usuario', methods:['GET', 'POST'])]
     public function salvar(Request $request): Response
     {
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('danger', 'Acesso negado. Área restrita a administradores.');
+            return $this->render('erro/erro.html.twig', [
+                'erro' => '401'
+            ]);
+        }
+
         $usuario = new Usuario();
         $form = $this->createForm(UsuarioType::class, $usuario, [
             'is_edit' => false,

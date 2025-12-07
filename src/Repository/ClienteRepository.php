@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Cliente;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use App\Exception\Cliente\CpfJaCadastradoException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class ClienteRepository extends ServiceEntityRepository
@@ -16,8 +18,13 @@ class ClienteRepository extends ServiceEntityRepository
     public function salvar(Cliente $cliente): void
     {
         $em = $this->getEntityManager();
-        $em->persist($cliente);
-        $em->flush();
+
+        try {
+            $em->persist($cliente);
+            $em->flush();
+        } catch (UniqueConstraintViolationException $e) {
+            throw new CpfJaCadastradoException();
+        }
     }
 
     public function remover(Cliente $cliente): void
@@ -27,24 +34,24 @@ class ClienteRepository extends ServiceEntityRepository
         $em->flush();
     }
 
-        public function buscarPorNomeOuCpf(string $busca): array
+    public function buscarPorNomeOuCpf(string $busca): array
     {
         $busca = trim($busca);
 
         $qb = $this->createQueryBuilder('c')
-              ->orderBy('c.nome', 'ASC');
+            ->orderBy('c.nome', 'ASC');
 
         if ($busca !== '') {
             $cpf = preg_replace('/\D/', '', $busca);
 
             $qb->where('c.nome LIKE :termoGeral')
-               ->setParameter('termoGeral', '%' . $busca . '%');
+                ->setParameter('termoGeral', '%' . $busca . '%');
 
             if (!empty($cpf)) {
                 $qb->orWhere('c.cpf LIKE :termoCpf')
-                   ->setParameter('termoCpf', '%' . $cpf . '%');        
+                    ->setParameter('termoCpf', '%' . $cpf . '%');
             }
-      }
+        }
 
         return $qb->getQuery()->getResult();
     }

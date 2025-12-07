@@ -26,6 +26,20 @@
                             <i class="bi bi-plus"></i> Novo cliente
                         </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black active" 
+                           href="#">
+                            <i class="bi bi-eye"></i> Vizualizar
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black" 
+                           href="{{ path('clientes_editar', {id: cliente.id}) }}">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                    </li>
                 </ul>
 
                 <div class="w-100 mt-4">
@@ -64,15 +78,6 @@
                                        value="{{ cliente.email }}"
                                        disabled readonly>
                             </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Status:</label><br>
-                            {% if cliente.isAtivo %}
-                                <span class="badge bg-success">Ativo</span>
-                            {% else %}
-                                <span class="badge bg-secondary">Inativo</span>
-                            {% endif %}
                         </div>
 
                         <a href="{{ path('clientes_index') }}" class="btn btn-secondary mt-3 w-100">
