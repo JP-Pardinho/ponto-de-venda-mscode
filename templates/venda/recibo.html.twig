@@ -107,7 +107,7 @@
 												<strong>Total Pago:</strong>
 											</td>
 											<td class="text-end">
-												<strong class="{{ venda.status == 2 ? 'text-danger' : 'text-success' }} fs-5">
+												<strong class="{{ venda.status == 2 ? 'text-danger text-decoration-line-through' : 'text-success' }} fs-5">
 													R$
 													{{ (venda.valorTotal - venda.valorDesconto)|number_format(2, ',', '.') }}
 												</strong>
