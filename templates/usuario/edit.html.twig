@@ -3,18 +3,18 @@
 {% block title %}PDV - Editar Usuário{% endblock %}
 
 {% block body %}
-
 <div class="row mt-4">
     <div class="col-12">
         <div class="card shadow-sm">
-            <div class="container py-5">
-                <div class="mb-4 d-flex flex-row justify-content-between">
-                    <h1>
-                        <i class="bi bi-person-circle"></i>  Editar Usuário #{{ usuario.id }}
+            <div class="card-body py-4">
+                <div class="mb-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                    <h1 class="h3 mb-2 mb-md-0">
+                        <i class="bi bi-person-circle me-2"></i>
+                        Editar Usuário #{{ usuario.id }}
                     </h1>
                 </div>
 
-                <ul class="nav nav-tabs mb-3">
+                <ul class="nav nav-tabs mb-3 flex-wrap">
                     <li class="nav-item">
                         <a class="nav-link text-black" href="{{ path('listar_usuarios') }}">
                             <i class="bi bi-list-ul"></i> Listar usuários
@@ -28,7 +28,7 @@
                     
                     <li class="nav-item">
                         <a class="nav-link text-black" href="{{ path('ver_usuario', {id: usuario.id}) }}">
-                            <i class="bi bi-eye"></i> Vizualizar
+                            <i class="bi bi-eye"></i> Visualizar
                         </a>
                     </li>
                     
@@ -42,17 +42,18 @@
                 {% include "/partials/error-mensage.html.twig" %}
                 
                 <div class="w-100 mt-2">
-                      <div class="alert alert-info mt-2">
-                        <i class="bi bi-info-circle"></i> Deixe os campos de senha em branco se não quiser alterá-la.
+                    <div class="alert alert-info mt-2">
+                        <i class="bi bi-info-circle"></i>
+                        Deixe os campos de senha em branco se não quiser alterá-la.
                     </div>
 
                     {{ form_start(form) }}
                     
-                    <div class="row">
-                        <div class="col-md-6">
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
                             {{ form_row(form.nome) }}
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             {{ form_row(form.email) }}
                         </div>
                     </div>
@@ -66,7 +67,7 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-end">
+                    <div class="d-flex flex-column flex-md-row justify-content-md-end gap-2 mt-3">
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-check-lg"></i>
                             Salvar Alterações
@@ -79,5 +80,4 @@
         </div>
     </div>
 </div>
-    
 {% endblock %}

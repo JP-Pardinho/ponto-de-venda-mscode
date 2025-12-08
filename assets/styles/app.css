@@ -1,8 +1,9 @@
-body {
+body { 
     display: flex;
     min-height: 100vh;
     flex-direction: row;
     background-color: darkgray;
+    margin: 0;
 }
 
 .sidebar {
@@ -20,7 +21,6 @@ body {
 .main-content {
     margin-left: 280px;
     width: calc(100% - 280px);
-
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -29,6 +29,17 @@ body {
 .page-content {
     padding: 2rem;
     flex-grow: 1;
+}
+
+.page-content > .container,
+.page-content > .container-fluid,
+.page-content > .row,
+.page-content > .card {
+    max-width: 100%;
+}
+
+.card {
+    max-width: 100%;
 }
 
 .sidebar .title {
@@ -43,7 +54,8 @@ body {
     padding: 0.75rem 1rem;
 }
 
-.sidebar .nav-link:hover, .sidebar .nav-link.active {
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
     color: #fff;
     background-color: #476575;
     border-radius: 5px;
@@ -93,3 +105,95 @@ body {
         padding-bottom: 0;
     }
 }
+
+.sidebar-collapse-checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sidebar,
+.main-content {
+    transition: all 0.25s ease;
+}
+
+@media (min-width: 992px) {
+
+    #sidebar-collapse-toggle:checked ~ .sidebar {
+        width: 80px;
+    }
+
+    #sidebar-collapse-toggle:checked ~ .main-content {
+        margin-left: 80px;
+        width: calc(100% - 80px);
+    }
+
+    #sidebar-collapse-toggle:checked ~ .sidebar .nav-link span,
+    #sidebar-collapse-toggle:checked ~ .sidebar .title,
+    #sidebar-collapse-toggle:checked ~ .sidebar h3 {
+        display: none;
+    }
+
+    #sidebar-collapse-toggle:checked ~ .sidebar .nav-link {
+        justify-content: center;
+    }
+
+    #sidebar-collapse-toggle:checked ~ .sidebar .nav-link .bi {
+        margin-right: 0;
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: relative;
+        top: auto;
+        left: auto;
+        bottom: auto;
+
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+        overflow-y: visible;
+    }
+
+    .sidebar ul {
+        flex-direction: column !important;
+    }
+
+    .sidebar .nav-link {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        min-height: auto;
+    }
+
+    .page-content {
+        padding: 1rem;
+    }
+
+    .page-content > * {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+@media (max-width: 575.98px) {
+    table {
+        font-size: 0.85rem;
+    }
+}
+

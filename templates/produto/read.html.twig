@@ -1,18 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}PDV - Cadastrar Produto{% endblock %}
+{% block title %}PDV - Detalhes do Produto{% endblock %}
 
 {% block body %}
-
 <div class="row mt-4">
     <div class="col-12">
         <div class="card shadow-sm">
-            <div class="container py-5">
-                <div class="mb-4 d-flex flex-row justify-content-between">
-                    <h1><i class="bi bi-box-seam-fill"></i> Produto #{{ produto.id }}</h1>
+            <div class="card-body py-4">
+                <div class="mb-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                    <h1 class="h3 mb-2 mb-md-0">
+                        <i class="bi bi-box-seam-fill me-2"></i>
+                        Produto #{{ produto.id }}
+                    </h1>
                 </div>
 
-                <ul class="nav nav-tabs mb-3">
+                <ul class="nav nav-tabs mb-3 flex-wrap">
                     <li class="nav-item">
                         <a class="nav-link text-black" href="{{ path('listar_produtos') }}">
                             <i class="bi bi-list-ul"></i> Listar produtos
@@ -26,15 +28,13 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black active" 
-                           href="#">
-                            <i class="bi bi-eye"></i> Vizualizar
+                        <a class="nav-link text-black active" href="#">
+                            <i class="bi bi-eye"></i> Visualizar
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black" 
-                           href="{{ path('editar_produto', {produto: produto.id}) }}">
+                        <a class="nav-link text-black" href="{{ path('editar_produto', {produto: produto.id}) }}">
                             <i class="bi bi-pencil"></i> Editar
                         </a>
                     </li>
@@ -42,45 +42,80 @@
 
                 <div class="w-100 mt-4">
                     {% include "/partials/error-mensage.html.twig" %}
+
                     <form>
                         <div class="mb-3">
-                            <label for="nome" class="form-label">Nome:</label>
-                            <input type="text" class="form-control" value="{{ produto.nome }}" aria-label="Nome" disabled readonly>
+                            <label class="form-label">Nome:</label>
+                            <input type="text"
+                                   class="form-control"
+                                   value="{{ produto.nome }}"
+                                   aria-label="Nome"
+                                   disabled
+                                   readonly>
                         </div>
 
                         <div class="mb-3">
-                            <label for="descricao" class="form-label">Descrição:</label>
-                            <input type="text" class="form-control" value="{{ produto.descricao }}" aria-label="Descrição" disabled readonly>
+                            <label class="form-label">Descrição:</label>
+                            <input type="text"
+                                   class="form-control"
+                                   value="{{ produto.descricao }}"
+                                   aria-label="Descrição"
+                                   disabled
+                                   readonly>
                         </div>
 
-                        <div class="row">
-                            <div class="mb-3 col-6">
-                                <label for="categoria_id" class="form-label">Categoria:</label>
-                                <input type="text" class="form-control" value="{{ produto.categoria.nome }}" aria-label="Categoria" disabled readonly>
+                        <div class="row g-3">
+                            <div class="mb-3 col-12 col-md-6">
+                                <label class="form-label">Categoria:</label>
+                                <input type="text"
+                                       class="form-control"
+                                       value="{{ produto.categoria.nome }}"
+                                       aria-label="Categoria"
+                                       disabled
+                                       readonly>
                             </div>
 
-                            <div class="mb-3 col-6">
-                                <label for="valor" class="form-label">Data cadastro:</label>
-                                <input type="text" class="form-control" value="{{ produto.dataCadastro|date('d/m/Y') }}" aria-label="Data cadastro" disabled readonly>
+                            <div class="mb-3 col-12 col-md-6">
+                                <label class="form-label">Data cadastro:</label>
+                                <input type="text"
+                                       class="form-control"
+                                       value="{{ produto.dataCadastro|date('d/m/Y') }}"
+                                       aria-label="Data cadastro"
+                                       disabled
+                                       readonly>
                             </div>
 
-                            <div class="mb-3 col-6">
-                                <label for="quantidade" class="form-label">Quantidade:</label>
-                                <input type="text" class="form-control" value="{{ produto.quantidadeEstoque }}" aria-label="Quantidade Estoque" disabled readonly>
+                            <div class="mb-3 col-12 col-md-6">
+                                <label class="form-label">Quantidade:</label>
+                                <input type="text"
+                                       class="form-control"
+                                       value="{{ produto.quantidadeEstoque }}"
+                                       aria-label="Quantidade em estoque"
+                                       disabled
+                                       readonly>
                             </div>
 
-                            <div class="mb-3 col-6">
-                                <label for="valor" class="form-label">Valor:</label>
-                                <input type="text" class="form-control" value="R${{ produto.valor|number_format(2, ',', '.') }}" aria-label="Valor" disabled readonly>
+                            <div class="mb-3 col-12 col-md-6">
+                                <label class="form-label">Valor:</label>
+                                <input type="text"
+                                       class="form-control"
+                                       value="R${{ produto.valor|number_format(2, ',', '.') }}"
+                                       aria-label="Valor"
+                                       disabled
+                                       readonly>
                             </div>
                         </div>
                         
-                        <a href="{{ path('listar_produtos') }}" class="btn btn-secondary mt-3 w-100">Voltar</a>
+                        <div class="d-flex flex-column flex-md-row justify-content-md-end mt-3">
+                            <a href="{{ path('listar_produtos') }}"
+                               class="btn btn-secondary w-100 w-md-auto">
+                                Voltar
+                            </a>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-    
 {% endblock %}

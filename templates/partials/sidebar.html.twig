@@ -4,7 +4,7 @@
     <a href="{{ path('app') }}" class="d-flex align-items-center text-white text-decoration-none">
         <h3 class="text-white mt-3">
             <i class="bi bi-code-square"></i>
-            Dashboard
+            <span>Dashboard</span>
         </h3>
     </a>
 
@@ -12,11 +12,11 @@
 
     <ul class="nav nav-pills flex-column">
         <li class="nav-item">
-            <a href="{{ path('pdv_novaVenda') }}" 
-               class="nav-link d-flex align-items-center text-white text-decoration-none 
-               {{ app.request.pathInfo starts with '/pdv' ? 'active' : '' }}">
+            <a href="{{ path('pdv_novaVenda')}}" 
+            class="nav-link d-flex align-items-center text-white text-decoration-none 
+            {{ app.request.pathInfo starts with '/pdv' ? 'active' : '' }}">
                 <i class="bi bi-shop fs-4 me-2"></i>
-                PDV
+                <span>PDV</span>
             </a>
         </li>
     </ul>
@@ -29,7 +29,7 @@
                class="nav-link d-flex align-items-center text-white text-decoration-none 
                {% if current_path starts with path('listar_categorias') %}active{% endif %}">
                 <i class="bi bi-tags fs-4 me-2"></i>
-                Categorias
+                <span>Categorias</span>
             </a>
         </li>
 
@@ -38,15 +38,15 @@
                class="nav-link d-flex align-items-center text-white text-decoration-none
                {% if current_path starts with path('listar_produtos') %}active{% endif %}">
                 <i class="bi bi-box-seam fs-4 me-2"></i>
-                Produtos
+                <span>Produtos</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="{{ path('listar_vendas') }}" class="nav-link d-flex align-items-center text-white text-decoration-none
-            {% if current_path starts with path('listar_vendas') %}active{% endif %}">
+            <a href="{{ path('listar_vendas')}}" class="nav-link d-flex align-items-center text-white text-decoration-none
+             {% if current_path starts with path('listar_vendas') %}active{% endif %}">
                 <i class="bi bi-currency-dollar fs-4 me-2"></i>
-                Vendas
+                <span>Vendas</span>
             </a>
         </li>
     </ul>
@@ -55,34 +55,29 @@
 
     <ul class="nav nav-pills flex-column">
         <li class="nav-item">
-            <a href="{{ path('clientes_index')}}" 
-              class="nav-link d-flex align-items-center text-white text-decoration-none
-              {% if current_path starts with path('clientes_index') %}active{% endif %}" 
-              >
+            <a href="{{ path('clientes_index')}}" class="nav-link d-flex align-items-center text-white text-decoration-none
+             {% if current_path starts with path('clientes_index') %}active{% endif %}">
                 <i class="bi bi-person-video2 fs-4 me-2"></i>
-                Clientes
+                <span>Clientes</span>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ path('listar_usuarios') }}" 
-               class="nav-link d-flex align-items-center text-white text-decoration-none
-               {% if current_path starts with path('listar_usuarios') %}active{% endif %}"
-               >
+            <a href="{{ path('listar_usuarios') }}" class="nav-link d-flex align-items-center text-white text-decoration-none
+            {% if current_path starts with path('listar_usuarios') %}active{% endif %}">
                 <i class="bi bi-person-circle fs-4 me-2"></i>
-                Usuários
+                <span>Usuários</span>
             </a>
         </li>
     </ul>
 
-     <hr class="text-secondary">
+    <hr class="text-secondary">
 
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="{{ path('app_sobre') }}" 
-              class="nav-link d-flex align-items-center text-white text-decoration-none
-              {% if current_path starts with path('app_sobre') %}active{% endif %}">
+            <a href="{{ path('app_sobre') }}" class="nav-link d-flex align-items-center text-white text-decoration-none
+            {% if current_path starts with path('app_sobre') %}active{% endif %}">
                 <i class="bi bi-info-circle-fill fs-4 me-2"></i>
-                Sobre
+                <span>Sobre</span>
             </a>
         </li>
     </ul>
