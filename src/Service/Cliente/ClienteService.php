@@ -14,14 +14,10 @@ class ClienteService
         private ClienteRepository $clienteRepository
     ) {}
 
-    /**
-     * Normaliza e valida CPF.
-     */
     private function normalizarCpf(Cliente $cliente): void
     {
         $cpf = $cliente->getCpf() ?? '';
 
-        // remove tudo que não for número
         $cpf = preg_replace('/\D/', '', $cpf);
 
         if ($cpf === '' || $cpf === null) {
@@ -32,7 +28,6 @@ class ClienteService
             throw new ClienteInvalidDataException('O CPF não pode ter mais de 11 dígitos.');
         }
 
-        // completa com zeros à esquerda
         $cpf = str_pad($cpf, 11, '0', STR_PAD_LEFT);
 
         $cliente->setCpf($cpf);
@@ -44,7 +39,6 @@ class ClienteService
             throw new ClienteInvalidDataException("O nome não pode ficar vazio.");
         }
 
-        // normaliza e valida CPF
         $this->normalizarCpf($cliente);
 
         $cliente->setAtivo(true);
@@ -63,7 +57,6 @@ class ClienteService
             throw new ClienteInvalidDataException("O nome não pode ficar vazio.");
         }
 
-        // normaliza e valida CPF
         $this->normalizarCpf($cliente);
 
         $this->clienteRepository->salvar($cliente);

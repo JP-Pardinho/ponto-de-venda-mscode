@@ -6,7 +6,6 @@ use App\Repository\ClienteRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ClienteRepository::class)]
@@ -35,15 +34,43 @@ class Cliente
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?\DateTimeImmutable $createdAt = null;
 
-    /**
-     * @var Collection<int, Venda>
-     */
     #[ORM\OneToMany(targetEntity: Venda::class, mappedBy: 'cliente')]
     private Collection $compras;
 
     public function __construct()
     {
         $this->compras = new ArrayCollection();
+    }
+
+    private static function getChaveSecreta(): string
+    {
+        $chave = $_SERVER['CPF_SECRET_KEY'] ?? $_ENV['CPF_SECRET_KEY'] ?? null;
+
+        if (empty($chave)) {
+            throw new \RuntimeException('A variável CPF_SECRET_KEY não foi definida no arquivo .env');
+        }
+        return $chave;
+    }
+
+    private function getFixedIV(): string 
+    {
+        return substr(hash('sha256', self::getChaveSecreta()), 0, 16);
+    }
+
+    public static function criptografarParaBusca(string $cpfLimpo): string
+    {
+        $chave = self::getChaveSecreta();
+        $iv = substr(hash('sha256', $chave), 0, 16);
+        
+        $encrypted = \openssl_encrypt(
+            $cpfLimpo, 
+            'aes-256-cbc', 
+            $chave, 
+            0, 
+            $iv
+        );
+
+        return base64_encode($encrypted);
     }
 
     public function getId(): ?int
@@ -59,19 +86,37 @@ class Cliente
     public function setNome(string $nome): static
     {
         $this->nome = $nome;
-
         return $this;
     }
 
     public function getCpf(): ?string
     {
-        return $this->cpf;
+        if (!$this->cpf) {
+            return null;
+        }
+
+        $decrypted = \openssl_decrypt(
+            base64_decode($this->cpf), 
+            'aes-256-cbc', 
+            self::getChaveSecreta(), 
+            0, 
+            $this->getFixedIV()
+        );
+
+        return $decrypted === false ? $this->cpf : $decrypted;
     }
 
     public function setCpf(string $cpf): static
     {
-        $this->cpf = $cpf;
+        $encrypted = \openssl_encrypt(
+            $cpf, 
+            'aes-256-cbc', 
+            self::getChaveSecreta(), 
+            0, 
+            $this->getFixedIV()
+        );
 
+        $this->cpf = base64_encode($encrypted);
         return $this;
     }
 
@@ -83,7 +128,6 @@ class Cliente
     public function setEmail(?string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -95,11 +139,10 @@ class Cliente
     public function setTelefone(?string $telefone): static
     {
         $this->telefone = $telefone;
-
         return $this;
     }
 
-        public function isAtivo(): ?bool
+    public function isAtivo(): ?bool
     {
         return $this->ativo;
     }
@@ -121,10 +164,6 @@ class Cliente
         return $this;
     }
 
-
-    /**
-     * @return Collection<int, Venda>
-     */
     public function getCompras(): Collection
     {
         return $this->compras;
@@ -136,19 +175,16 @@ class Cliente
             $this->compras->add($compra);
             $compra->setCliente($this);
         }
-
         return $this;
     }
 
     public function removeCompra(Venda $compra): static
     {
         if ($this->compras->removeElement($compra)) {
-            // set the owning side to null (unless already changed)
             if ($compra->getCliente() === $this) {
                 $compra->setCliente(null);
             }
         }
-
         return $this;
     }
 }
