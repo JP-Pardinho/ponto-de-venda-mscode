@@ -6,15 +6,15 @@
 <div class="row mt-4">
     <div class="col-12">
         <div class="card shadow-sm">
-            <div class="container py-5">
-                <div class="mb-4 d-flex flex-row justify-content-between">
-                    <h1>
-                        <i class="bi bi-person-badge-fill"></i>
+            <div class="card-body py-4">
+                <div class="mb-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                    <h1 class="h3 mb-2 mb-md-0">
+                        <i class="bi bi-person-badge-fill me-2"></i>
                         Cliente: {{ cliente.nome }}
                     </h1>
                 </div>
 
-                <ul class="nav nav-tabs mb-3">
+                <ul class="nav nav-tabs mb-3 flex-wrap">
                     <li class="nav-item">
                         <a class="nav-link text-black" href="{{ path('clientes_index') }}">
                             <i class="bi bi-list-ul"></i> Listar clientes
@@ -28,15 +28,13 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black active" 
-                           href="#">
-                            <i class="bi bi-eye"></i> Vizualizar
+                        <a class="nav-link text-black active" href="#">
+                            <i class="bi bi-eye"></i> Visualizar
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black" 
-                           href="{{ path('clientes_editar', {id: cliente.id}) }}">
+                        <a class="nav-link text-black" href="{{ path('clientes_editar', {id: cliente.id}) }}">
                             <i class="bi bi-pencil"></i> Editar
                         </a>
                     </li>
@@ -62,8 +60,8 @@
                                    disabled readonly>
                         </div>
 
-                        <div class="row">
-                            <div class="mb-3 col-6">
+                        <div class="row g-3">
+                            <div class="mb-3 col-12 col-md-6">
                                 <label class="form-label">Telefone:</label>
                                 <input type="text"
                                        class="form-control"
@@ -71,7 +69,7 @@
                                        disabled readonly>
                             </div>
 
-                            <div class="mb-3 col-6">
+                            <div class="mb-3 col-12 col-md-6">
                                 <label class="form-label">Email:</label>
                                 <input type="text"
                                        class="form-control"
@@ -80,9 +78,11 @@
                             </div>
                         </div>
 
-                        <a href="{{ path('clientes_index') }}" class="btn btn-secondary mt-3 w-100">
-                            Voltar
-                        </a>
+                        <div class="d-flex flex-column flex-md-row justify-content-md-end mt-3">
+                            <a href="{{ path('clientes_index') }}" class="btn btn-secondary w-100 w-md-auto">
+                                Voltar
+                            </a>
+                        </div>
                     </form>
                 </div>
             </div>
