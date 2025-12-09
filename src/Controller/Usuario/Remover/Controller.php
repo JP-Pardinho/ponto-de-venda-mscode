@@ -25,8 +25,15 @@ final class Controller extends AbstractController
             ]);
         }
 
-        $this->usuarioService->inativar($usuario);
-        $this->addFlash('success', 'Usuário removido com sucesso!');
+        $usuarioLogado = $this->getUser();
+
+        try {
+            $this->usuarioService->inativar($usuario, $usuarioLogado);
+            $this->addFlash('success', 'Usuário removido com sucesso!');
+        } catch (\Exception $e) {
+            $this->addFlash('danger', $e->getMessage());
+            $this->redirectToRoute('listar_usuarios');
+        }
 
         return $this->redirectToRoute('listar_usuarios');
     }

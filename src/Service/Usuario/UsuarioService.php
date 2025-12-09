@@ -3,6 +3,8 @@
 namespace App\Service\Usuario;
 
 use App\Entity\Usuario;
+use App\Exception\Usuario\DesativarContaAdminException;
+use App\Exception\Usuario\DesativarPropriaContaException;
 use App\Exception\Usuario\SenhaObrigatoriaException;
 use App\Exception\Usuario\UsuarioInativoException;
 use App\Repository\UsuarioRepository;
@@ -44,10 +46,17 @@ class UsuarioService
         $this->usuarioRepository->salvar($usuario);
     }
 
-    public function inativar(Usuario $usuario): void
+    public function inativar(Usuario $usuarioAlvo, Usuario $usuarioExecutor): void
     {
-        $usuario->setAtivo(false);
-        $this->usuarioRepository->salvar($usuario);
+        if ($usuarioAlvo->getId() === $usuarioExecutor->getId()) 
+            throw new DesativarPropriaContaException();
+        
+        if (in_array('ROLE_ADMIN', $usuarioAlvo->getRoles())) 
+            throw new DesativarContaAdminException();
+        
+
+        $usuarioAlvo->setAtivo(false);
+        $this->usuarioRepository->salvar($usuarioAlvo);
     }
 
     public function verificaStatusUsuario(Usuario $usuario): void

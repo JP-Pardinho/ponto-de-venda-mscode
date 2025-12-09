@@ -20,7 +20,9 @@ final class Controller extends AbstractController
         // $vendas = $this->vendaRepository->findAll();
         // dd($vendas);
         return $this->render('venda/index.html.twig', [
-            'vendas' => $this->vendaRepository->findAll(),
+            'vendas' => $this->vendaRepository->findBy([], [
+                'dataVenda' => 'DESC'
+            ]),
         ]);
     }
 }
