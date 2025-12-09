@@ -84,7 +84,7 @@
                                                 <i class="bi bi-eye"></i>
                                             </a>
                                             
-                                            {% if venda.status != 'Cancelada' %}
+                                            {% if venda.status != 'Cancelada' and is_granted('ROLE_ADMIN') %}
                                                 {% set message = 'Você tem certeza que deseja cancelar esta venda?' %}
 
                                                 <form action="{{ path('cancelar_venda', {id: venda.id}) }}" 

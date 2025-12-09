@@ -61,13 +61,15 @@
                 <span>Clientes</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a href="{{ path('listar_usuarios') }}" class="nav-link d-flex align-items-center text-white text-decoration-none
-            {% if current_path starts with path('listar_usuarios') %}active{% endif %}">
-                <i class="bi bi-person-circle fs-4 me-2"></i>
-                <span>Usuários</span>
-            </a>
-        </li>
+        {% if is_granted('ROLE_ADMIN') %}
+            <li class="nav-item">
+                <a href="{{ path('listar_usuarios') }}" class="nav-link d-flex align-items-center text-white text-decoration-none
+                {% if current_path starts with path('listar_usuarios') %}active{% endif %}">
+                    <i class="bi bi-person-circle fs-4 me-2"></i>
+                    <span>Usuários</span>
+                </a>
+            </li>
+        {% endif %}
     </ul>
 
     <hr class="text-secondary">

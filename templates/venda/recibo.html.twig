@@ -173,7 +173,7 @@
                                                     <td>{{ pagamento.tipoPagamento }}</td>
                                                     <td class="text-end">
                                                         {{ pagamento.tipoPagamento == 'CREDITO' ? pagamento.parcelas ~ 'x ' : '' }}
-                                                        R$ {{ pagamento.valor|number_format(2, ',', '.') }}
+                                                        R$ {{ pagamento.parcelas == 1 ? pagamento.valor|number_format(2, ',', '.') : (pagamento.valor / pagamento.parcelas)|number_format(2, ',', '.') }}
                                                     </td>
                                                 </tr>
                                             {% endfor %}

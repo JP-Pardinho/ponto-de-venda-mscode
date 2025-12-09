@@ -85,7 +85,9 @@
                                             <td>{{ pagamento.tipoPagamento }}</td>
                                             <td class="text-end text-success">
                                                 <strong>{{ pagamento.parcelas == 1 ? '' : pagamento.parcelas  ~ 'x' }}</strong> 
-                                                <strong>R$ {{ pagamento.valor|number_format(2, ',', '.') }}</strong>
+                                                <strong>
+                                                    R$ {{ pagamento.parcelas == 1 ? pagamento.valor|number_format(2, ',', '.') : (pagamento.valor / pagamento.parcelas)|number_format(2, ',', '.') }}
+                                                    </strong>
                                             </td>
                                         </tr>
                                     {% else %}
