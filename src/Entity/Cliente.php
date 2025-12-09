@@ -52,7 +52,7 @@ class Cliente
         return $chave;
     }
 
-    private function getFixedIV(): string 
+    private function getFixedIV(): string
     {
         return substr(hash('sha256', self::getChaveSecreta()), 0, 16);
     }
@@ -61,12 +61,12 @@ class Cliente
     {
         $chave = self::getChaveSecreta();
         $iv = substr(hash('sha256', $chave), 0, 16);
-        
+
         $encrypted = \openssl_encrypt(
-            $cpfLimpo, 
-            'aes-256-cbc', 
-            $chave, 
-            0, 
+            $cpfLimpo,
+            'aes-256-cbc',
+            $chave,
+            0,
             $iv
         );
 
@@ -96,10 +96,10 @@ class Cliente
         }
 
         $decrypted = \openssl_decrypt(
-            base64_decode($this->cpf), 
-            'aes-256-cbc', 
-            self::getChaveSecreta(), 
-            0, 
+            base64_decode($this->cpf),
+            'aes-256-cbc',
+            self::getChaveSecreta(),
+            0,
             $this->getFixedIV()
         );
 
@@ -109,15 +109,32 @@ class Cliente
     public function setCpf(string $cpf): static
     {
         $encrypted = \openssl_encrypt(
-            $cpf, 
-            'aes-256-cbc', 
-            self::getChaveSecreta(), 
-            0, 
+            $cpf,
+            'aes-256-cbc',
+            self::getChaveSecreta(),
+            0,
             $this->getFixedIV()
         );
 
         $this->cpf = base64_encode($encrypted);
         return $this;
+    }
+
+    public function getCpfFormatado(): ?string
+    {
+        $cpf = $this->getCpf();
+
+        if (empty($cpf)) {
+            return null;
+        }
+
+        $cpfLimpo = preg_replace('/\D/', '', $cpf);
+
+        return preg_replace(
+            '/(\d{3})(\d{3})(\d{3})(\d{2})/',
+            '$1.$2.$3-$4',
+            $cpfLimpo
+        );
     }
 
     public function getEmail(): ?string
@@ -140,6 +157,27 @@ class Cliente
     {
         $this->telefone = $telefone;
         return $this;
+    }
+
+    public function getTelefoneFormatado(): ?string
+    {
+        $telefone = $this->getTelefone();
+
+        if (empty($telefone)) {
+            return null;
+        }
+
+        $nums = preg_replace('/\D/', '', $telefone);
+
+        if (strlen($nums) === 11) {
+            return preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3', $nums);
+        }
+
+        if (strlen($nums) === 10) {
+            return preg_replace('/(\d{2})(\d{4})(\d{4})/', '($1) $2-$3', $nums);
+        }
+
+        return $telefone;
     }
 
     public function isAtivo(): ?bool

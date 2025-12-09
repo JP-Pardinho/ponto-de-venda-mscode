@@ -73,8 +73,8 @@
                             {% for cliente in clientes %}
                                 <tr class="align-middle">
                                     <td>{{ cliente.nome }}</td>
-                                    <td>{{ cliente.cpf }}</td>
-                                    <td>{{ cliente.telefone }}</td>
+                                    <td>{{ cliente.cpfFormatado }}</td>
+                                    <td>{{ cliente.telefoneFormatado }}</td>
                                     <td>{{ cliente.email }}</td>
                                     <td>
                                         {% if cliente.isAtivo %}
@@ -156,7 +156,7 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                </div> 
+                </div>
             </div>
         </div>
     </div>
