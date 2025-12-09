@@ -10,8 +10,10 @@ use App\Exception\Produto\ProdutoEstoqueIndisponivelException;
 use App\Exception\Produto\ProdutoInativoException;
 use App\Exception\Produto\ProdutoNaoEncontradoException;
 use App\Exception\Usuario\UsuarioNaoEncontradoException;
+use App\Exception\Venda\DescontoInvalidoException;
 use App\Exception\Venda\ItemNaoEncontradoException;
 use App\Exception\Venda\PagamentoInsuficienteException;
+use App\Exception\Venda\PorcentagemDescontoInvalidoException;
 use App\Exception\Venda\RemoverItemVendaFechadaException;
 use App\Exception\Venda\ValorDescontoInvalidoException;
 use App\Exception\Venda\ValorDescontoNegativoException;
@@ -22,6 +24,7 @@ use App\Repository\VendaRepository;
 use App\Repository\UsuarioRepository;
 use App\Repository\VendaItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class VendaService
 {
@@ -31,6 +34,7 @@ class VendaService
         private VendaRepository $vendaRepository,
         private UsuarioRepository $usuarioRepository,
         private VendaItemRepository $vendaItemRepository,
+        private Security $security
     ) {
     }
 
@@ -134,13 +138,17 @@ class VendaService
 
         if (!$venda) throw new VendaNaoEncontradaException();
         
-        if ($valorDesconto > $venda->getValorTotal()) {
-            throw new ValorDescontoInvalidoException();
+        if ($valorDesconto > $venda->getValorTotal()) throw new ValorDescontoInvalidoException();
+        
+
+        $limiteOperador = $venda->getValorTotal() * 0.10;
+
+        if ($this->security->isGranted('ROLE_USER') || $this->security->isGranted('')  && !$this->security->isGranted('ROLE_ADMIN')) {
+            if ($valorDesconto > $limiteOperador) 
+                throw new PorcentagemDescontoInvalidoException();
         }
 
-        if ($valorDesconto < 0) {
-            throw new ValorDescontoNegativoException();
-        }
+        if ($valorDesconto < 0) throw new ValorDescontoNegativoException();
 
         $venda->setValorDesconto($valorDesconto);
         $this->entityManager->flush();

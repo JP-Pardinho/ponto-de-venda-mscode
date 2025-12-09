@@ -68,9 +68,9 @@ class ClienteService
             throw new ClienteNaoEncontradoException();
         }
 
-        if (!$cliente->getCompras()->isEmpty()) {
-            throw new ClienteTemVendasException();
-        }
+        // if (!$cliente->getCompras()->isEmpty()) {
+        //     throw new ClienteTemVendasException();
+        // }
 
         $cliente->setAtivo(false);
         $this->clienteRepository->salvar($cliente);
