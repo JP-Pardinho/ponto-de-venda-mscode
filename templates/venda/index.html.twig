@@ -72,7 +72,21 @@
                                         </span>
                                     </td>
 
-                                    <td>{{ venda.tipoEntrega }}</td>
+                                    <td>
+                                        {% if venda.tipoEntrega == 'ENTREGA' and venda.status != 0 %}
+                                        <span class="badge bg-info text-dark">
+                                            Entrega
+                                        </span>
+                                        {% elseif venda.tipoEntrega == 'RETIRADA' and venda.status != 0 %}
+                                            <span class="badge bg-secondary">
+                                                Retirada
+                                            </span>
+                                        {% else %}
+                                            <span>
+                                                -
+                                            </span>
+                                        {% endif %}
+                                    </td>
 
                                     <td class="text-center">
                                         <div class="d-inline-flex flex-wrap justify-content-center gap-1">

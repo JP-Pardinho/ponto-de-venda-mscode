@@ -130,6 +130,16 @@ class VendaService
         }
 
         $venda->setValorTotal($total);
+
+        $descontoAtual = $venda->getValorDesconto() ?? 0.0;
+        if ($descontoAtual >= $total) {
+            $venda->setValorDesconto(0.0);
+        }
+
+        $limiteOperador = $total * 0.10;
+        if (!$this->security->isGranted('ROLE_ADMIN') && $descontoAtual > $limiteOperador) {
+            $venda->setValorDesconto(0.0);
+        }
     }
 
     public function aplicarDesconto(int $vendaId, ?float $valorDesconto = 0.0): void

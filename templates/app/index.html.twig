@@ -96,13 +96,17 @@
                                 </td>
 
                                 <td>
-                                    {% if venda.tipoEntrega == 'ENTREGA' %}
+                                    {% if venda.tipoEntrega == 'ENTREGA' and venda.status != 0 %}
                                         <span class="badge bg-info text-dark">
                                             Entrega
                                         </span>
-                                    {% else %}
+                                    {% elseif venda.tipoEntrega == 'RETIRADA' and venda.status != 0 %}
                                         <span class="badge bg-secondary">
                                             Retirada
+                                        </span>
+                                    {% else %}
+                                        <span>
+                                            -
                                         </span>
                                     {% endif %}
                                 </td>
