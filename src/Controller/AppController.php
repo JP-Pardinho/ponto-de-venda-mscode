@@ -28,7 +28,7 @@ final class AppController extends AbstractController
 
         foreach ($todasVendas as $venda) {
             if ($venda->getStatus() == Venda::STATUS_FINALIZADA) {
-                $valorVenda = $venda->getValorTotal();
+                $valorVenda = $venda->getValorTotal() - $venda->getValorDesconto();
                 $faturamentoTotal += $valorVenda;
             }
 
