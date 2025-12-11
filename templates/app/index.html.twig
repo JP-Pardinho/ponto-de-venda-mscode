@@ -112,7 +112,7 @@
                                 </td>
 
                                 <td class="text-end fw-bold text-success">
-                                    R$ {{ venda.valorTotal|number_format(2, ',', '.') }}
+                                    R$ {{ (venda.valorTotal - venda.valorDesconto)|number_format(2, ',', '.')  }}
                                 </td>
 
                                 <td class="text-center">
