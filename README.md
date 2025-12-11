@@ -198,7 +198,7 @@ _Nome do grupo:_ ÁPICE
 
 | Nome | Contato |
 | :--- | :--- |
-| **Amábile Kosloski** | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](www.linkedin.com/in/amábile-kosloski-927216302) |
+| **Amábile Kosloski** | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/amábile-kosloski) |
 | **João Pedro Pardinho** | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jppardinho/) |
 | **Leonardo** | |
 
